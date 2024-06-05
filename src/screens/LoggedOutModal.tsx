@@ -1,6 +1,7 @@
 import { Button, TextField, Alert } from "@suid/material";
 import { createSignal } from "solid-js";
 import styles from './LoggedOutModal.module.css';
+import api from '../lib/api';
 
 
 const [userToken, setUserToken] = createSignal('');
@@ -10,14 +11,15 @@ const [alertVisible, showAlert] = createSignal(false);
 const [errorMessage, setErrorMessage] = createSignal('');
 
 
-function login() {
+async function login() {
 	if (userToken() === '') {
 		showAlert(true);
 		setErrorMessage('Please enter a user token');
 		return;
 	}
-
-
+	const tokenValid = await api.verifyToken(userToken());
+	console.log(tokenValid);
+	
 }
 
 
