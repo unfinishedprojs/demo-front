@@ -1,0 +1,11 @@
+.registerWrapper {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-template-rows: repeat(2, min-content);
+	grid-template-areas: 
+		'codeInput discordIDInput'
+		'empty button'
+	;
+	gap: .5rem;
+	place-items: end;
+}
