@@ -1,0 +1,21 @@
+{
+  "name": "demo-front",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+	"dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "@suid/vite-plugin": "^0.2.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.12",
+    "vite-plugin-solid": "^2.10.2"
+  },
+  "dependencies": {
+    "@suid/icons-material": "^0.7.0",
+    "@suid/material": "^0.16.0",
+    "solid-js": "^1.8.17"
+  }
+}
