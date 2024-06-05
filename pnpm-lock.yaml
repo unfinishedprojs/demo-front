@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@fontsource-variable/inter':
+        specifier: ^5.0.18
+        version: 5.0.18
+      '@fontsource/poppins':
+        specifier: ^5.0.14
+        version: 5.0.14
       '@suid/icons-material':
         specifier: ^0.7.0
         version: 0.7.0(solid-js@1.8.17)
@@ -288,6 +294,12 @@ packages:
     engines: {node: '>=12'}
     cpu: [x64]
     os: [win32]
+
+  '@fontsource-variable/inter@5.0.18':
+    resolution: {integrity: sha512-rJzSrtJ3b7djiGFvRuTe6stDfbYJGhdQSfn2SI2WfXviee7Er0yKAHE5u7FU7OWVQQQ1x3+cxdmx9NdiAkcrcA==}
+
+  '@fontsource/poppins@5.0.14':
+    resolution: {integrity: sha512-nmM1zpPo3Uh4JcGAVSQuWaZNYh2FbbwWhZ5t6hRaynmJaNTBW85d3nEh9zMmzI0HX7X5xqQVdRHeDatKpOGsnA==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -1290,6 +1302,10 @@ snapshots:
 
   '@esbuild/win32-x64@0.20.2':
     optional: true
+
+  '@fontsource-variable/inter@5.0.18': {}
+
+  '@fontsource/poppins@5.0.14': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:

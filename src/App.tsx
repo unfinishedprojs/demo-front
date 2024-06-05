@@ -1,5 +1,15 @@
-import Button from "@suid/material/Button";
+import { Show } from "solid-js";
+import { user } from './lib/user'
+
+import LoggedOutScreen from "./screens/LoggedOutModal";
+import MainScreen from "./screens/MainScreen";
 
 export default function App() {
-  return <Button variant="contained">Hello world</Button>;
+  return (
+	<div class="flex items-center justify-center w-full h-screen">
+		<Show when={user.status === 'loggedIn'} fallback={<LoggedOutScreen />}>
+			<MainScreen />
+		</Show>
+	</div>
+	);
 }
