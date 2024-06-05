@@ -17,9 +17,9 @@ async function awaitedPost(
 	})
 
 	if (!res.ok) {
-    const message = `API: awaitedPost: An error has occured: ${res.status}`;
-    throw new Error(message);
-  }
+		const message = `API: awaitedPost: An error has occured: ${res.status}`;
+		throw new Error(message);
+	}
 	const json = await res.json()
 	return json
 }
@@ -37,9 +37,9 @@ async function awaitedGet(
 	const res = await fetch(url.toString(), { headers: headers, })
 
 	if (!res.ok) {
-    const message = `API: awaitedPost: An error has occured: ${res.status}`;
-    throw new Error(message);
-  }
+		const message = `API: awaitedPost: An error has occured: ${res.status}`;
+		throw new Error(message);
+	}
 	const json = await res.json()
 	return json
 }
