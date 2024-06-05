@@ -1,4 +1,4 @@
-import { Button, TextField } from "@suid/material";
+import { Button, TextField, Alert } from "@suid/material";
 import { createSignal } from "solid-js";
 import styles from './LoggedOutModal.module.css';
 
@@ -6,8 +6,17 @@ import styles from './LoggedOutModal.module.css';
 const [userToken, setUserToken] = createSignal('');
 const [inviteCode, setInviteCode] = createSignal('');
 
+const [alertVisible, showAlert] = createSignal(false);
+const [errorMessage, setErrorMessage] = createSignal('');
+
+
 function login() {
-	if (userToken() === '') return;
+	if (userToken() === '') {
+		showAlert(true);
+		setErrorMessage('Please enter a user token');
+		return;
+	}
+
 
 }
 
@@ -28,11 +37,11 @@ export default function LoggedOutScreen() {
       />
 			<div class="flex gap-2">
 				<Button variant="contained" class="w-max" >LocalStorage login</Button>
-				<Button variant="contained" class="w-36" >Login</Button>
+				<Button variant="contained" class="w-36" onClick={login}>Login</Button>
 			</div>
 		</div>
 		<h2 class="text-md font-medium">Register</h2>
-		<div class={`${styles.registerWrapper}`}>
+		<div class={styles.registerWrapper}>
 			<TextField
         id="outlined-basic"
         label="Registration code"
@@ -51,5 +60,8 @@ export default function LoggedOutScreen() {
 			<Button variant="contained" 
 				class="w-36" style={{ 'grid-area': 'button' }}>Register</Button>
 		</div>
+		<p id="errorText" hidden={!alertVisible()}>
+			<Alert severity="error" onClose={() => showAlert(false)}>{errorMessage()}</Alert>
+		</p>
 	</div>)
 }
