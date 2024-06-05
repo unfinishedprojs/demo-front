@@ -44,7 +44,6 @@ async function awaitedGet(
 }
 
 export const api = {
-	req: () => {},
 	verifyToken: async (token: string) => {
 		return await awaitedGet('/api/ievents', {}, token)
 	},
