@@ -1,6 +1,5 @@
 
 const baseURL = 'http://158.179.221.229:5000'
-// TODO add token header auth support
 
 async function awaitedPost(
 	endpoint: string, 
