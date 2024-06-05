@@ -1,4 +1,5 @@
 # solidjs frontend for democracy server
+Democracy Server Voting Infra: frontend
 WIP, contribute or else!  
   
 solidjs is very easy btw  
