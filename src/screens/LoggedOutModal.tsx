@@ -19,7 +19,7 @@ async function login() {
 	}
 	const tokenValid = await api.verifyToken(userToken());
 	console.log(tokenValid);
-	
+
 }
 
 
@@ -35,6 +35,7 @@ export default function LoggedOutScreen() {
         label="User token"
         variant="outlined"
 				fullWidth
+				autoComplete="off"
 				onChange={(e) => setUserToken(e.currentTarget.value)}
       />
 			<div class="flex gap-2">
@@ -49,6 +50,7 @@ export default function LoggedOutScreen() {
         label="Registration code"
         variant="outlined"
 				style={{ 'grid-area': 'codeInput' }}
+				autoComplete="off"
 				helperText="Invite code provided to you by a senior"
 				onChange={(e) => setInviteCode(e.currentTarget.value)}
       />
@@ -56,6 +58,7 @@ export default function LoggedOutScreen() {
         id="outlined-basic"
         label="Discord ID"
         variant="outlined"
+				autoComplete="off"
 				helperText="Make sure it's your actual Discord ID"
 				style={{ 'grid-area': 'discordIDInput' }}
       />
