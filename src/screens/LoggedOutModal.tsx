@@ -26,7 +26,10 @@ export default function LoggedOutScreen() {
 				fullWidth
 				onChange={(e) => setUserToken(e.currentTarget.value)}
       />
-			<Button variant="contained" class="w-36" >Login</Button>
+			<div class="flex gap-2">
+				<Button variant="contained" class="w-max" >LocalStorage login</Button>
+				<Button variant="contained" class="w-36" >Login</Button>
+			</div>
 		</div>
 		<h2 class="text-md font-medium">Register</h2>
 		<div class={`${styles.registerWrapper}`}>
@@ -35,12 +38,14 @@ export default function LoggedOutScreen() {
         label="Registration code"
         variant="outlined"
 				style={{ 'grid-area': 'codeInput' }}
+				helperText="Invite code provided to you by a senior"
 				onChange={(e) => setInviteCode(e.currentTarget.value)}
       />
 			<TextField
         id="outlined-basic"
         label="Discord ID"
         variant="outlined"
+				helperText="Make sure it's your actual Discord ID"
 				style={{ 'grid-area': 'discordIDInput' }}
       />
 			<Button variant="contained" 
