@@ -3,12 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-	"dev": "vite",
+    "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
   },
   "devDependencies": {
     "@suid/vite-plugin": "^0.2.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5",
     "vite": "^5.2.12",
     "vite-plugin-solid": "^2.10.2"
