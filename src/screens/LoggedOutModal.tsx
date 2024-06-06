@@ -91,12 +91,8 @@ async function register() {
 	console.log(res)
 }
 
-
-export default function LoggedOutScreen() {
-	return (<div class="w-auto flex flex-col justify-center gap-5
-		p-8 bg-slate-300 rounded-lg
-	">
-		<h1 class="text-2xl font-600">Democracy Server Voting Infra</h1>
+function LoginSection() {
+	return (<>
 		<h2 class="text-md font-medium">Login</h2>
 		<span class="text-sm">Once logged in, your token will be stored in localStorage</span>
 		<div class="flex gap-2 flex-col items-end">
@@ -117,6 +113,11 @@ export default function LoggedOutScreen() {
 				<Button variant="contained" class="w-36" onClick={login}>Login</Button>
 			</div>
 		</div>
+	</>)
+}
+
+function RegisterSection() {
+	return (<>
 		<h2 class="text-md font-medium">Register</h2>
 		<div class={styles.registerWrapper}>
 			<TextField
@@ -142,6 +143,17 @@ export default function LoggedOutScreen() {
 				onClick={register}
 			>Register</Button>
 		</div>
+</>)
+}
+
+
+export default function LoggedOutScreen() {
+	return (<div class="w-auto flex flex-col justify-center gap-5
+		p-8 bg-slate-300 rounded-lg
+	">
+		<h1 class="text-2xl font-600">Democracy Server Voting Infra</h1>
+		<LoginSection />
+		<RegisterSection />
 		<p id="errorText" hidden={!alertVisible()}>
 			<Alert severity={alertSeverity()} onClose={() => {
 				showAlert(false);

@@ -15,10 +15,6 @@ const [inviteEvents, { mutate, refetch}] = createResource(async () => {
 
 
 export default function MainScreen() {
-	// createEffect(() => {
-	// 	if (userStatus() === 'loggedIn') refetch()
-	// })
-
 	return (
 	<div class="w-auto flex flex-col justify-center gap-5
 	p-8 bg-slate-300 rounded-lg
