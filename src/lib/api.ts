@@ -32,7 +32,7 @@ async function awaitedPost(
 		body: JSON.stringify(body),
 	})
 
-	if (!res.ok) { return await handleError('awaitedPost', res); }
+	if (!res.ok) return await handleError('awaitedPost', res)
 	const json = await res.json()
 	return json
 }
@@ -54,7 +54,7 @@ async function awaitedGet(
 		res = await fetch(`${baseURL}${endpoint}`, { headers: headers, })
 	}
 
-	if (!res.ok) { return await handleError('awaitedPost', res); }
+	if (!res.ok) return await handleError('awaitedPost', res)
 	const json = await res.json()
 	return json as unknown
 }
