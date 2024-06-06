@@ -88,7 +88,17 @@ async function register() {
 		setErrorMessage(`Registration failed! ${msg} (${res.status})`);
 		return;
 	}
-	console.log(res)
+
+	// Stole code from above :3
+
+	setUser({
+		status: 'loggedIn',
+		token: res.token,
+		discordID: res.discordId
+	})
+	localStorage.setItem('token', res.token)
+	showAlert(false);
+	setUserToken('');
 }
 
 function LoginSection() {
