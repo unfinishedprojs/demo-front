@@ -1,3 +1,4 @@
+import type { apiFetchError } from "./types";
 
 const baseURL = 'http://158.179.221.229:5000'
 
@@ -16,7 +17,11 @@ async function awaitedPost(
 	})
 
 	if (!res.ok) {
-		return { error: `API: awaitedPost: ${res.status} ${res.statusText}` };
+		return { 
+			error: `API: awaitedPost: ${res.status} ${res.statusText}`,
+			status: res.status,
+			statusText: res.statusText
+		} satisfies apiFetchError;
 	}
 	const json = await res.json()
 	return json
@@ -35,7 +40,11 @@ async function awaitedGet(
 	const res = await fetch(url.toString(), { headers: headers, })
 
 	if (!res.ok) {
-		return { error: `API: awaitedGet: ${res.status} ${res.statusText}` };
+		return { 
+			error: `API: awaitedGet: ${res.status} ${res.statusText}`,
+			status: res.status,
+			statusText: res.statusText
+		} satisfies apiFetchError;
 	}
 	const json = await res.json()
 	return json as unknown
