@@ -1,9 +1,21 @@
 import type { 
 	APIUsersVerifyResponse, 
-	APIFetchError 
+	APIFetchError, 
+	APIRegisterResponse
 } from "./types";
 
 const baseURL = 'http://158.179.221.229:5000'
+
+/** assumes res.ok === false */
+async function handleError(requestType: string,res: Response) {
+	const err: APIFetchError = { 
+		error: `API: ${requestType}: ${res.status} ${res.statusText}`,
+		status: res.status,
+		statusText: res.statusText,
+	}
+	try { err.maybeJson = await res.json() } catch (e) { }
+	return err;
+}
 
 async function awaitedPost(
 	endpoint: string, 
@@ -19,13 +31,7 @@ async function awaitedPost(
 		body: JSON.stringify(body),
 	})
 
-	if (!res.ok) {
-		return { 
-			error: `API: awaitedPost: ${res.status} ${res.statusText}`,
-			status: res.status,
-			statusText: res.statusText
-		} satisfies APIFetchError;
-	}
+	if (!res.ok) { return await handleError('awaitedPost', res); }
 	const json = await res.json()
 	return json
 }
@@ -47,13 +53,7 @@ async function awaitedGet(
 		res = await fetch(`${baseURL}${endpoint}`, { headers: headers, })
 	}
 
-	if (!res.ok) {
-		return { 
-			error: `API: awaitedGet: ${res.status} ${res.statusText}`,
-			status: res.status,
-			statusText: res.statusText
-		} satisfies APIFetchError;
-	}
+	if (!res.ok) { return await handleError('awaitedPost', res); }
 	const json = await res.json()
 	return json as unknown
 }
@@ -61,6 +61,11 @@ async function awaitedGet(
 export const api = {
 	verifyToken: async (token: string) => {
 		return await awaitedPost('/api/users/verify', {}, token) as APIUsersVerifyResponse | APIFetchError
+	},
+	register: async (inviteCode: string, discordID: string) => {
+		return await awaitedPost('/api/users/register', { 
+			invite: inviteCode, discordId:discordID
+		}) as APIRegisterResponse | APIFetchError
 	},
 	getInviteEvents: async (token: string, opts: Record<string, string> = {}) => {
 		return await awaitedGet('/api/ievents', opts, token) as unknown | APIFetchError

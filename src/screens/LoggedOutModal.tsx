@@ -7,8 +7,9 @@ import api from '../lib/api';
 import { setUser } from "../lib/user";
 
 
-export const [userToken, setUserToken] = createSignal('');
+const [userToken, setUserToken] = createSignal('');
 const [inviteCode, setInviteCode] = createSignal('');
+const [discordID, setDiscordID] = createSignal('');
 
 const [alertVisible, showAlert] = createSignal(false);
 const [alertSeverity, setAlertSeverity] = createSignal<alertSeverity>('error');
@@ -32,18 +33,20 @@ async function login() {
 			console.error(tokenValid);
 		}
 		return;
-	} else {
-		setUser({
-			status: 'loggedIn',
-			token: tokenValid.token,
-			discordID: tokenValid.discordId
-		})
-		localStorage.setItem('token', tokenValid.token)
 	}
+	setUser({
+		status: 'loggedIn',
+		token: tokenValid.token,
+		discordID: tokenValid.discordId
+	})
+	localStorage.setItem('token', tokenValid.token)
+	showAlert(false);
+	setUserToken('');
+
 	// console.log(tokenValid);
 }
 
-async function localStorageLogin() {
+function localStorageLogin() {
 	const token = localStorage.getItem('token');
 	if (!token) {
 		setAlertSeverity('warning');
@@ -55,7 +58,7 @@ async function localStorageLogin() {
 	login();
 }
 
-async function localStorageClear() {
+function localStorageClear() {
 	const token = localStorage.getItem('token');
 	if (!token) return;
 	localStorage.removeItem('token')
@@ -65,6 +68,28 @@ async function localStorageClear() {
 	setUserToken('');
 }
 
+async function register() {
+	if (!inviteCode()) {
+		showAlert(true);
+		setErrorMessage('Please enter an invite code');
+		return;
+	}
+	if (!discordID()) {
+		showAlert(true);
+		setErrorMessage('Please enter your Discord ID');
+		return;
+	}
+
+	const res = await api.register(inviteCode(), discordID());
+	if ('error' in res) {
+		console.log(res)
+		showAlert(true);
+		setErrorMessage(`Registration failed! ${res.statusText} (${res.status})`);
+		return;
+	}
+	console.log(res)
+}
+
 
 export default function LoggedOutScreen() {
 	return (<div class="w-auto flex flex-col justify-center gap-5
@@ -72,6 +97,7 @@ export default function LoggedOutScreen() {
 	">
 		<h1 class="text-2xl font-600">Democracy Server Voting Infra</h1>
 		<h2 class="text-md font-medium">Login</h2>
+		<span class="text-sm">Once logged in, your token will be stored in localStorage</span>
 		<div class="flex gap-2 flex-col items-end">
 			<TextField
         id="outlined-basic"
@@ -94,7 +120,7 @@ export default function LoggedOutScreen() {
 		<div class={styles.registerWrapper}>
 			<TextField
         id="outlined-basic"
-        label="Registration code"
+        label="Invite code"
         variant="outlined"
 				style={{ 'grid-area': 'codeInput' }}
 				autoComplete="off"
@@ -105,12 +131,15 @@ export default function LoggedOutScreen() {
         id="outlined-basic"
         label="Discord ID"
         variant="outlined"
+				style={{ 'grid-area': 'discordIDInput' }}
 				autoComplete="off"
 				helperText="Make sure it's your actual Discord ID"
-				style={{ 'grid-area': 'discordIDInput' }}
+				onChange={(e) => setDiscordID(e.currentTarget.value)}
       />
 			<Button variant="contained" 
-				class="w-36" style={{ 'grid-area': 'button' }}>Register</Button>
+				class="w-36" style={{ 'grid-area': 'button' }}
+				onClick={register}
+			>Register</Button>
 		</div>
 		<p id="errorText" hidden={!alertVisible()}>
 			<Alert severity={alertSeverity()} onClose={() => {

@@ -1,10 +1,8 @@
 import { user, setUser } from "../lib/user";
-import { setUserToken } from "../screens/LoggedOutModal";
 import { Button } from "@suid/material";
 
 function logout() {
 	setUser({ status: 'loggedOut' })
-	setUserToken('') // just in case
 }
 
 export default function LoggedInHeader() {

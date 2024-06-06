@@ -15,13 +15,21 @@ interface loggedInUser extends baseUser {
 export interface APIFetchError {
 	error: string,
 	status: number,
-	statusText: string
+	statusText: string,
+	maybeJson?: string
 }
 
 export interface APIUsersVerifyResponse {
 	discordId: string;
 	token:     string;
 	admin:     null;
+}
+
+export interface APIRegisterResponse {
+	token: string;
+	invite: string;
+	iEventID: string;
+	discordId: string;
 }
 
 export type userStore = loggedInUser | loggedOutUser
