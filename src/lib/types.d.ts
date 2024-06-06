@@ -7,7 +7,9 @@ interface loggedOutUser extends baseUser {
 }
 
 interface loggedInUser extends baseUser {
-	status: 'loggedIn'
+	status: 'loggedIn',
+	token: string,
+	discordID: string
 }
 
 export type userStore = loggedInUser | loggedOutUser

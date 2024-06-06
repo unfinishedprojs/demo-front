@@ -5,7 +5,7 @@ async function awaitedPost(
 	endpoint: string, 
 	body: Record<string, unknown>, 
 	token: string | null = null
-) {
+): Promise<unknown | { error: string }> {
 	const headers: Record<string, string> = { 'Content-Type': 'application/json' }
 	if (token) headers['Authorization'] = `${token}`
 
@@ -16,8 +16,7 @@ async function awaitedPost(
 	})
 
 	if (!res.ok) {
-		const message = `API: awaitedPost: An error has occured: ${res.status}`;
-		throw new Error(message);
+		return { error: `API: awaitedPost: ${res.status} ${res.statusText}` };
 	}
 	const json = await res.json()
 	return json
@@ -27,7 +26,7 @@ async function awaitedGet(
 	endpoint: string, 
 	body: Record<string, string>, 
 	token: string | null = null
-) {
+): Promise<unknown | { error: string }> {
 	const headers: Record<string, string> = { 'Content-Type': 'application/json' }
 	if (token) headers['Authorization'] = `${token}`
 
@@ -36,16 +35,16 @@ async function awaitedGet(
 	const res = await fetch(url.toString(), { headers: headers, })
 
 	if (!res.ok) {
-		const message = `API: awaitedGet: An error has occured: ${res.status}`;
-		throw new Error(message);
+		return { error: `API: awaitedGet: ${res.status} ${res.statusText}` };
 	}
 	const json = await res.json()
-	return json
+	return json as unknown
 }
 
 export const api = {
 	verifyToken: async (token: string) => {
-		return await awaitedGet('/api/ievents', {}, token)
+		return await awaitedPost('/api/users/verify', {}, token)
 	},
+
 }
 export default api;
