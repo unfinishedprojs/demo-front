@@ -16,8 +16,11 @@ i'm using typescript because workin with untyped apis is pain.
 ## todo
 - [ ] registering users
   - [ ] printing out their toke
-  - [ ] saving token to localstorage
-- [ ] login with token
+  - [ ] saving token to localstorage upon registration
+- [x] login with token
+  - [x] saves token to localstorage
+- [x] login with localStorage
+- [x] clearing localStorage
 - [ ] only allow registering if you know the password for registeration
   - better yet, have to get a invite token or something from another user
   - so randoms can't sway the v
