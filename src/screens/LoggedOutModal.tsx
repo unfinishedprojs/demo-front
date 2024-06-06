@@ -84,7 +84,8 @@ async function register() {
 	if ('error' in res) {
 		console.log(res)
 		showAlert(true);
-		setErrorMessage(`Registration failed! ${res.statusText} (${res.status})`);
+		const msg = res?.maybeJson.message ?? res.statusText
+		setErrorMessage(`Registration failed! ${msg} (${res.status})`);
 		return;
 	}
 	console.log(res)

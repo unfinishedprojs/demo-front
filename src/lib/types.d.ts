@@ -12,11 +12,11 @@ interface loggedInUser extends baseUser {
 	discordID: string
 }
 
-export interface APIFetchError {
+export interface APIFetchError<T extends Object = Record<string, string>> {
 	error: string,
 	status: number,
 	statusText: string,
-	maybeJson?: string
+	maybeJson?: T
 }
 
 export interface APIUsersVerifyResponse {
@@ -30,6 +30,10 @@ export interface APIRegisterResponse {
 	invite: string;
 	iEventID: string;
 	discordId: string;
+}
+
+export interface APIRegisterErrorResponse {
+	message: string;
 }
 
 export type userStore = loggedInUser | loggedOutUser

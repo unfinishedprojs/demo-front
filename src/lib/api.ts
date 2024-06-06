@@ -1,7 +1,8 @@
 import type { 
 	APIUsersVerifyResponse, 
 	APIFetchError, 
-	APIRegisterResponse
+	APIRegisterResponse,
+	APIRegisterErrorResponse
 } from "./types";
 
 const baseURL = 'http://158.179.221.229:5000'
@@ -65,10 +66,10 @@ export const api = {
 	register: async (inviteCode: string, discordID: string) => {
 		return await awaitedPost('/api/users/register', { 
 			invite: inviteCode, discordId:discordID
-		}) as APIRegisterResponse | APIFetchError
+		}) as APIRegisterResponse | APIFetchError<APIRegisterErrorResponse>
 	},
 	getInviteEvents: async (token: string, opts: Record<string, string> = {}) => {
-		return await awaitedGet('/api/ievents', opts, token) as unknown | APIFetchError
+		return await awaitedGet('/api/ievents', opts, token) as APIRegisterResponse | APIFetchError
 	}
 }
 export default api;
