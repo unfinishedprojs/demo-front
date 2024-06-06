@@ -2,6 +2,7 @@ import { Button, TextField, Alert } from "@suid/material";
 import { createSignal } from "solid-js";
 import styles from './LoggedOutModal.module.css';
 import api from '../lib/api';
+import { setUser } from "../lib/user";
 
 
 const [userToken, setUserToken] = createSignal('');
@@ -17,7 +18,24 @@ async function login() {
 		setErrorMessage('Please enter a user token');
 		return;
 	}
-	const tokenValid = await api.verifyToken(userToken());
+	// tokens shouldn't ever be longer than 49 chars, but just in case
+	const tokenValid = await api.verifyToken(userToken().slice(0, 51));
+	if ('error' in tokenValid) {
+		showAlert(true)
+		if (tokenValid.status === 403) {
+			setErrorMessage('Invalid token, try again.');
+		} else {
+			setErrorMessage(`Something went wrong: ${tokenValid.error}. More info in console.`);
+			console.error(tokenValid);
+		}
+		return;
+	} else {
+		setUser({
+			status: 'loggedIn',
+			token: tokenValid.token,
+			discordID: tokenValid.discordId
+		})
+	}
 	console.log(tokenValid);
 
 }

@@ -12,10 +12,16 @@ interface loggedInUser extends baseUser {
 	discordID: string
 }
 
-interface apiFetchError {
+export interface APIFetchError {
 	error: string,
 	status: number,
 	statusText: string
+}
+
+export interface APIUsersVerifyResponse {
+	discordId: string;
+	token:     string;
+	admin:     null;
 }
 
 export type userStore = loggedInUser | loggedOutUser
