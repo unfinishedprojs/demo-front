@@ -1,14 +1,17 @@
-import { Button, TextField, Alert } from "@suid/material";
+import type { alertSeverity } from "../lib/types";
+
+import { Button, TextField, Alert, ButtonGroup } from "@suid/material";
 import { createSignal } from "solid-js";
 import styles from './LoggedOutModal.module.css';
 import api from '../lib/api';
 import { setUser } from "../lib/user";
 
 
-const [userToken, setUserToken] = createSignal('');
+export const [userToken, setUserToken] = createSignal('');
 const [inviteCode, setInviteCode] = createSignal('');
 
 const [alertVisible, showAlert] = createSignal(false);
+const [alertSeverity, setAlertSeverity] = createSignal<alertSeverity>('error');
 const [errorMessage, setErrorMessage] = createSignal('');
 
 
@@ -35,9 +38,31 @@ async function login() {
 			token: tokenValid.token,
 			discordID: tokenValid.discordId
 		})
+		localStorage.setItem('token', tokenValid.token)
 	}
-	console.log(tokenValid);
+	// console.log(tokenValid);
+}
 
+async function localStorageLogin() {
+	const token = localStorage.getItem('token');
+	if (!token) {
+		setAlertSeverity('warning');
+		showAlert(true)
+		setErrorMessage('No token found in localStorage');
+		return;
+	}
+	setUserToken(token);
+	login();
+}
+
+async function localStorageClear() {
+	const token = localStorage.getItem('token');
+	if (!token) return;
+	localStorage.removeItem('token')
+	setAlertSeverity('success');
+	showAlert(true);
+	setErrorMessage('Token removed from localStorage');
+	setUserToken('');
 }
 
 
@@ -56,8 +81,12 @@ export default function LoggedOutScreen() {
 				autoComplete="off"
 				onChange={(e) => setUserToken(e.currentTarget.value)}
       />
-			<div class="flex gap-2">
-				<Button variant="contained" class="w-max" >LocalStorage login</Button>
+			<div class="w-full flex gap-2 justify-between">
+				<ButtonGroup variant="outlined" class="w-max">
+					<Button variant="outlined" disableRipple>localStorage</Button>	
+					<Button variant="outlined" onClick={localStorageClear}>clear</Button>
+					<Button variant="outlined" onClick={localStorageLogin}>login</Button>
+				</ButtonGroup>
 				<Button variant="contained" class="w-36" onClick={login}>Login</Button>
 			</div>
 		</div>
@@ -84,7 +113,10 @@ export default function LoggedOutScreen() {
 				class="w-36" style={{ 'grid-area': 'button' }}>Register</Button>
 		</div>
 		<p id="errorText" hidden={!alertVisible()}>
-			<Alert severity="error" onClose={() => showAlert(false)}>{errorMessage()}</Alert>
+			<Alert severity={alertSeverity()} onClose={() => {
+				showAlert(false);
+				setAlertSeverity('error');
+			}}>{errorMessage()}</Alert>
 		</p>
 	</div>)
 }

@@ -25,3 +25,5 @@ export interface APIUsersVerifyResponse {
 }
 
 export type userStore = loggedInUser | loggedOutUser
+
+export type alertSeverity = 'error' | 'warning' | 'info' | 'success';
