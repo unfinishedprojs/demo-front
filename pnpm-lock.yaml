@@ -14,6 +14,9 @@ importers:
       '@fontsource/poppins':
         specifier: ^5.0.14
         version: 5.0.14
+      '@solidjs/router':
+        specifier: ^0.13.5
+        version: 0.13.5(solid-js@1.8.17)
       '@suid/icons-material':
         specifier: ^0.7.0
         version: 0.7.0(solid-js@1.8.17)
@@ -421,6 +424,11 @@ packages:
     resolution: {integrity: sha512-UOo5FdvOL0+eIVTgS4tIdbW+TtnBLWg1YBCcU2KWM7nuNwRz9bksDX1bekJJCpu25N1DVWaCwnT39dVQxzqS8g==}
     cpu: [x64]
     os: [win32]
+
+  '@solidjs/router@0.13.5':
+    resolution: {integrity: sha512-I/bR5ZHCz2Dx80qL+6uGwSdclqXRqoT49SJ5cvLbOuT3HnYysSIxSfULCTWUMLFVcgPh5GrdHV6KwEoyrbPZZA==}
+    peerDependencies:
+      solid-js: ^1.8.6
 
   '@suid/base@0.9.0':
     resolution: {integrity: sha512-uj6kYkPB2/79iKJQSIKrSqxA0H0/1vcxxsyclHRMdU/RL3FVGUfasmAMJR7E6YVLi78A+fsabBKeu/yQSrr/Hg==}
@@ -1397,6 +1405,10 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.18.0':
     optional: true
+
+  '@solidjs/router@0.13.5(solid-js@1.8.17)':
+    dependencies:
+      solid-js: 1.8.17
 
   '@suid/base@0.9.0(solid-js@1.8.17)':
     dependencies:

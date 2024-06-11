@@ -1,9 +1,5 @@
-/* @refresh reload */
-import { render } from "solid-js/web";
-import App from "./App";
+import { render } from 'solid-js/web';
+import App from './App';
+import './index.css';
 
-import './assets/main.css';
-import '@fontsource/poppins';
-import '@fontsource-variable/inter';
-
-render(() => <App />, document.getElementById("root")!);
+render(() => <App />, document.getElementById('root') as HTMLElement);

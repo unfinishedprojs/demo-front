@@ -1,41 +1,79 @@
 interface baseUser {
-	status: string
+  status: string;
 }
 
 interface loggedOutUser extends baseUser {
-	status: 'loggedOut'
+  status: "loggedOut";
 }
 
 interface loggedInUser extends baseUser {
-	status: 'loggedIn',
-	token: string,
-	discordID: string
+  status: "loggedIn";
+  token: string;
+  discordID: string;
 }
 
 export interface APIFetchError<T extends Object = Record<string, string>> {
-	error: string,
-	status: number,
-	statusText: string,
-	maybeJson?: T
+  error: string;
+  status: number;
+  statusText: string;
+  maybeJson?: T;
 }
 
 export interface APIUsersVerifyResponse {
-	discordId: string;
-	token:     string;
-	admin:     null;
+  discordId: string;
+  token: string;
+  admin: null;
 }
 
 export interface APIRegisterResponse {
-	token: string;
-	invite: string;
-	iEventID: string;
-	discordId: string;
+  token: string;
+  invite: string;
+  iEventID: string;
+  discordId: string;
+}
+
+export interface APIGetIEventResponse {
+    eventId: string,
+    discordId: string,
+    invite: string,
+    ended: boolean,
+    createdAt: Date,
+    duration: number,
+    positiveVotesInt: number,
+    negativeVotesInt: number
+}
+
+export interface APIGetIEventsResponse {
+	events: [
+	  eventId: string,
+	  discordId: string,
+	  invite: string,
+	  ended: boolean,
+	  createdAt: Date,
+	  duration: number,
+	  positiveVotesInt: number,
+	  negativeVotesInt: number
+	];
+  }
+
+export interface APIIVotePosResponse {
+  id: number;
+  userToken: string;
+  iEventId: string;
+  createdAt: Date;
+}
+
+export interface APIIVoteNegResponse {
+  id: number;
+  userToken: string;
+  iEventId: string;
+  createdAt: Date;
 }
 
 export interface APIRegisterErrorResponse {
-	message: string;
+  message: string;
 }
 
-export type userStore = loggedInUser | loggedOutUser
+export type userStore = loggedInUser | loggedOutUser;
 
-export type alertSeverity = 'error' | 'warning' | 'info' | 'success';
+export type alertSeverity = "error" | "warning" | "info" | "success";

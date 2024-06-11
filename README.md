@@ -26,3 +26,4 @@ i'm using typescript because workin with untyped apis is pain.
   - so randoms can't sway the v
 - [ ] logout
 - [ ] vote ui
+- [ ] Create actual errors for proper typings

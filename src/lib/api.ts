@@ -2,10 +2,13 @@ import type {
 	APIUsersVerifyResponse, 
 	APIFetchError, 
 	APIRegisterResponse,
-	APIRegisterErrorResponse
+	APIRegisterErrorResponse,
+	APIGetIEventResponse,
+	APIIVotePosResponse,
+	APIGetIEventsResponse
 } from "./types";
 
-const baseURL = 'http://158.179.221.229:5000'
+const baseURL = 'http://localhost:5000'
 
 /** assumes res.ok === false */
 async function handleError(requestType: string,res: Response) {
@@ -69,7 +72,22 @@ export const api = {
 		}) as APIRegisterResponse | APIFetchError<APIRegisterErrorResponse>
 	},
 	getInviteEvents: async (token: string, opts: Record<string, string> = {}) => {
-		return await awaitedGet('/api/ievents', opts, token) as APIRegisterResponse | APIFetchError
-	}
+		return await awaitedGet('/api/ievents', opts, token) as APIGetIEventsResponse | APIFetchError
+	},
+	getInviteEvent: async (token: string, eventId: string) => {
+		return await awaitedGet('/api/ievents/get', {
+			eventId: eventId
+		}, token) as APIGetIEventResponse | APIFetchError
+	},
+	votePositive: async (token: string, eventId: string) => {
+		return await awaitedPost('/api/ievents/vote/positive', {
+			eventId: eventId
+		}, token) as APIIVotePosResponse
+	},
+	voteNegative: async (token: string, eventId: string) => {
+		return await awaitedPost('/api/ievents/vote/negative', {
+			eventId: eventId
+		}, token) as APIIVotePosResponse
+	},
 }
 export default api;

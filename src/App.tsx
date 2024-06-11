@@ -1,15 +1,18 @@
-import { Show } from "solid-js";
-import { user } from './lib/user'
+import { Route, Router } from "@solidjs/router";
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
+import PollsPage from "./pages/PollsPage";
+import VotePage from "./pages/VotePage";
 
-import LoggedOutScreen from "./screens/LoggedOutModal";
-import MainScreen from "./screens/MainScreen";
-
-export default function App() {
+function App() {
   return (
-	<div class="flex items-center justify-center w-full h-screen">
-		<Show when={user.status === 'loggedIn'} fallback={<LoggedOutScreen />}>
-			<MainScreen />
-		</Show>
-	</div>
-	);
+    <Router>
+      <Route path="/" component={RegisterPage} />
+      <Route path="/login" component={LoginPage} />
+      <Route path="/polls" component={PollsPage} />
+      <Route path="/vote/:id" component={VotePage} />
+    </Router>
+  );
 }
+
+export default App;

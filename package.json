@@ -19,6 +19,7 @@
   "dependencies": {
     "@fontsource-variable/inter": "^5.0.18",
     "@fontsource/poppins": "^5.0.14",
+    "@solidjs/router": "^0.13.5",
     "@suid/icons-material": "^0.7.0",
     "@suid/material": "^0.16.0",
     "solid-js": "^1.8.17"
