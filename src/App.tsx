@@ -3,6 +3,7 @@ import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import PollsPage from "./pages/PollsPage";
 import VotePage from "./pages/VotePage";
+import SuggestUserPage from "./pages/SuggestUserPage";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Route path="/login" component={LoginPage} />
       <Route path="/polls" component={PollsPage} />
       <Route path="/vote/:id" component={VotePage} />
+      <Route path="/suggest" component={SuggestUserPage} />
     </Router>
   );
 }

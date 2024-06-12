@@ -33,6 +33,18 @@ export interface APIRegisterResponse {
 }
 
 export interface APIGetIEventResponse {
+  eventId: string;
+  discordId: string;
+  invite: string;
+  ended: boolean;
+  createdAt: Date;
+  duration: number;
+  positiveVotesInt: number;
+  negativeVotesInt: number;
+}
+
+export interface APIGetIEventsResponse {
+  events: [
     eventId: string,
     discordId: string,
     invite: string,
@@ -41,20 +53,20 @@ export interface APIGetIEventResponse {
     duration: number,
     positiveVotesInt: number,
     negativeVotesInt: number
+  ];
 }
 
-export interface APIGetIEventsResponse {
-	events: [
-	  eventId: string,
-	  discordId: string,
-	  invite: string,
-	  ended: boolean,
-	  createdAt: Date,
-	  duration: number,
-	  positiveVotesInt: number,
-	  negativeVotesInt: number
-	];
-  }
+export interface APISuggestUserResponse {
+  discordId?: string;
+  eventId?: string;
+  invite?: string;
+  discordPicture?: string,
+  ended?: boolean;
+  createdAt?: Date;
+  duration?: number;
+  positiveVotes?: number;
+  negativeVotes?: number;
+}
 
 export interface APIIVotePosResponse {
   id: number;
