@@ -14,16 +14,16 @@ i'm using typescript because workin with untyped apis is pain.
 - `pnpm dev` or `pnpm build` -> `pnpm serve`
 
 ## todo
-- [ ] registering users
+- [X] registering users
   - [ ] printing out their toke
-  - [ ] saving token to localstorage upon registration
+  - [X] saving token to localstorage upon registration
 - [x] login with token
   - [x] saves token to localstorage
 - [x] login with localStorage
 - [x] clearing localStorage
-- [ ] only allow registering if you know the password for registeration
+- [X] only allow registering if you know the password for registeration
   - better yet, have to get a invite token or something from another user
   - so randoms can't sway the v
 - [ ] logout
-- [ ] vote ui
+- [X] vote ui
 - [ ] Create actual errors for proper typings
