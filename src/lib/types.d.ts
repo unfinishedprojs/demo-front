@@ -83,6 +83,7 @@ export interface APIIVoteNegResponse {
 }
 
 export interface APIRegisterErrorResponse {
+  error: any;
   message: string;
 }
 

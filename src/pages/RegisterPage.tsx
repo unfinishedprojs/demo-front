@@ -2,15 +2,16 @@ import { createSignal, onMount } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import TextField from "@suid/material/TextField";
 import Button from "@suid/material/Button";
-import ThemeToggle from "../components/ThemeToggle";
 import api from "../lib/api";
 import "../css/form.css";
 import ClosableAlert from "../components/ClosableAlert";
+import NoLoginAppBar from "../components/NoLoginAppBar";
+import { Container, Box } from "@suid/material";
 
 const RegisterPage = () => {
   const [discordId, setDiscordId] = createSignal("");
   const [inviteCode, setInviteCode] = createSignal("");
-  const [error, setError] = createSignal('');
+  const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
   const navigate = useNavigate();
 
@@ -39,7 +40,7 @@ const RegisterPage = () => {
           setError(response.maybeJson?.message);
           return setAlertOpen(true);
         } else {
-          setError(response.maybeJson?.message || 'Something went wrong!');
+          setError(response.maybeJson ? response.maybeJson.error : "Something went wrong!");
           return setAlertOpen(true);
         }
       } else {
@@ -52,24 +53,35 @@ const RegisterPage = () => {
   };
 
   return (
-    <div class="container">
-      <div class="floating-box">
-        <ThemeToggle />
+    <Container maxWidth="sm">
+      <Box
+        sx={{
+          bgcolor: "box.box",
+          p: "20px",
+          border: "1px solid box.box",
+          borderRadius: "8px",
+        }}
+      >
+        <NoLoginAppBar />
         <h1 class="text-2xl">Register</h1>
-        <ClosableAlert open={alertOpen()} severity="error" onClose={() => setAlertOpen(false)}>
+        <ClosableAlert
+          open={alertOpen()}
+          severity="error"
+          onClose={() => setAlertOpen(false)}
+        >
           {error()}
         </ClosableAlert>
         <TextField
           label="Discord ID"
           variant="filled"
-          onInput={(e) => setDiscordId(e.target.value)}
+          onInput={(e) => setDiscordId((e.target as HTMLInputElement).value)}
           fullWidth
           margin="normal"
         />
         <TextField
           label="Invite Code"
           variant="filled"
-          onInput={(e) => setInviteCode(e.target.value)}
+          onInput={(e: Event) => setInviteCode((e.target as HTMLInputElement).value)}
           fullWidth
           margin="normal"
         />
@@ -82,8 +94,8 @@ const RegisterPage = () => {
             Login here
           </Button>
         </p>
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 };
 

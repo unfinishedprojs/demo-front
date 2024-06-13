@@ -1,10 +1,11 @@
 import { createSignal, onMount } from 'solid-js';
 import Brightness4Icon from '@suid/icons-material/Brightness4';
 import Brightness7Icon from '@suid/icons-material/Brightness7';
+import { IconButton } from '@suid/material';
 
 export const [theme, setTheme] = createSignal(localStorage.getItem('theme') || 'dark');
 
-const ThemeToggle = () => {
+const ThemeToggle = (props) => {
 
   onMount(() => {
     document.documentElement.setAttribute('data-theme', theme());
@@ -19,9 +20,9 @@ const ThemeToggle = () => {
   };
 
   return (
-    <button onClick={toggleTheme}>
-      {theme() === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
-    </button>
+    <IconButton onClick={toggleTheme}>
+      {theme() === 'light' ? <Brightness4Icon {...props} /> : <Brightness7Icon />}
+    </IconButton>
   );
 };
 

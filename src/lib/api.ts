@@ -102,7 +102,7 @@ export const api = {
         eventId: eventId,
       },
       token
-    )) as APIIVotePosResponse;
+    )) as APIIVotePosResponse | APIFetchError;
   },
   voteNegative: async (token: string, eventId: string) => {
     return (await awaitedPost(
@@ -111,10 +111,10 @@ export const api = {
         eventId: eventId,
       },
       token
-    )) as APIIVotePosResponse;
+    )) as APIIVotePosResponse | APIFetchError;
   },
   suggestUser: async (discordId: string, token: string) => {
-    return await awaitedPost("/api/ievents/suggest", { discordId }, token) as APISuggestUserResponse;
+    return await awaitedPost("/api/ievents/suggest", { discordId }, token) as APISuggestUserResponse | APIFetchError;
   },
 };
 export default api;

@@ -26,7 +26,12 @@ i'm using typescript because workin with untyped apis is pain.
   - so randoms can't sway the v
 - [X] logout
 - [X] vote ui
-- [ ] Create actual error alerts (Half done, missing voting page and suggestion page!)
+- [X] Create actual error alerts (Half done, missing voting page and suggestion page!)
+
+## v0.1.1
+
+- Added AppBar, so that icons are now organized
+- Finished adding errors to all pages
 
 ## v0.1.0
 

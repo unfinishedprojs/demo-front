@@ -1,13 +1,17 @@
 import { createSignal } from "solid-js";
 import TextField from "@suid/material/TextField";
 import Button from "@suid/material/Button";
-import ThemeToggle from "../components/ThemeToggle";
 import api from "../lib/api";
-import '../css/form.css'
-import LogOutButton from "../components/LogOut";
+import "../css/form.css";
+import AppBar from "../components/AppBar";
+import { Container, Box } from "@suid/material";
+import ClosableAlert from "../components/ClosableAlert";
 
 const SuggestUserPage = () => {
   const [discordId, setDiscordId] = createSignal("");
+
+  const [error, setError] = createSignal("");
+  const [alertOpen, setAlertOpen] = createSignal(false);
 
   const suggestUser = async () => {
     try {
@@ -19,7 +23,8 @@ const SuggestUserPage = () => {
 
       const response = await api.suggestUser(discordId(), token);
       if ("error" in response) {
-        alert(`Suggestion failed: ${response.error}`);
+        setError(response.maybeJson ? response.maybeJson.error : "Something went wrong!");
+        return setAlertOpen(true);
       } else {
         if (!response.duration) {
           alert("Suggestion received! Thank you!");
@@ -35,22 +40,36 @@ const SuggestUserPage = () => {
   };
 
   return (
-    <div class="container">
-      <div class="floating-box">
-        <ThemeToggle /> <LogOutButton />
+    <Container maxWidth="sm">
+      <Box
+        sx={{
+          bgcolor: "box.box",
+          p: "20px",
+          border: "1px solid box.box",
+          borderRadius: "8px",
+        }}
+      >
+        <AppBar />
         <h1 class="text-2xl">Suggest a User</h1>
+        <ClosableAlert
+          open={alertOpen()}
+          severity="error"
+          onClose={() => setAlertOpen(false)}
+        >
+          {error()}
+        </ClosableAlert>
         <TextField
           label="DiscordID"
           variant="outlined"
-          onInput={(e) => setDiscordId(e.target.value)}
+          onInput={(e) => setDiscordId((e.target as HTMLInputElement).value)}
           fullWidth
           margin="normal"
         />
         <Button variant="contained" color="primary" onClick={suggestUser}>
           Suggest User
         </Button>
-      </div>
-    </div>
+      </Box>
+    </Container>
   );
 };
 
