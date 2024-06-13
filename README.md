@@ -24,6 +24,14 @@ i'm using typescript because workin with untyped apis is pain.
 - [X] only allow registering if you know the password for registeration
   - better yet, have to get a invite token or something from another user
   - so randoms can't sway the v
-- [ ] logout
+- [X] logout
 - [X] vote ui
-- [ ] Create actual errors for proper typings
+- [ ] Create actual error alerts (Half done, missing voting page and suggestion page!)
+
+## v0.1.0
+
+- Stop using shoelace components, and use SUID components
+- Add light/dark mode (defaults to dark mode)
+- Add ClosableAlert component, so now the alerts wont be fullscreen popups, but closable boxes
+- Home button on logged in pages (home button just brings you to current events, might make actual dashboard at some point)
+- Log out button

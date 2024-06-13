@@ -1,41 +1,78 @@
-import { createSignal } from "solid-js";
+import { createSignal, onMount } from "solid-js";
+import { useNavigate } from "@solidjs/router";
+import TextField from "@suid/material/TextField";
+import Button from "@suid/material/Button";
+import ThemeToggle from "../components/ThemeToggle";
 import api from "../lib/api";
 import "../css/form.css";
+import ClosableAlert from "../components/ClosableAlert";
 
 const LoginPage = () => {
   const [token, setToken] = createSignal("");
+  const [error, setError] = createSignal("");
+  const [alertOpen, setAlertOpen] = createSignal(false);
+  const navigate = useNavigate();
+
+  onMount(async () => {
+    if (!localStorage.getItem("token")) return;
+
+    try {
+      const response = await api.verifyToken(localStorage.getItem("token"));
+      if ("error" in response) {
+        console.log("Token in localStorage is invalid, ignoring...");
+      } else {
+        alert("Account found, you have been logged in");
+        navigate("/polls");
+      }
+    } catch (error) {}
+  });
 
   const login = async () => {
     try {
       const response = await api.verifyToken(token());
       if ("error" in response) {
-        alert(`Login failed: ${response.error}`);
+        if (response.status === 403) {
+          setError(response.maybeJson?.message);
+          return setAlertOpen(true);
+        } else if (response.status === 400) {
+          setError(response.maybeJson?.message);
+          return setAlertOpen(true);
+        } else {
+          setError(response.maybeJson?.message || 'Something went wrong!');
+          return setAlertOpen(true);
+        }
       } else {
-        localStorage.setItem("token", token());
-        alert("Login successful!");
-        window.location.href = `/polls`
+        localStorage.setItem("token", response.token);
+        navigate("/polls");
       }
     } catch (error) {
-      alert("Login failed!");
+      setError('There was an error!');
+      return setAlertOpen(true);
     }
   };
 
   return (
     <div class="container">
       <div class="floating-box">
-        <div class="p-4">
-          <h1 class="text-2xl">Login</h1>
-          <br></br>
-          <sl-input
-            label="Token"
-            help-text="Token you got on register"
-            onInput={(e) => setToken(e.currentTarget.value)}
-          ></sl-input>
-          <br></br>
-          <sl-button variant="primary" onClick={login}>
-            Login
-          </sl-button>
-        </div>
+        <ThemeToggle />
+        <h1 class="text-2xl">Login</h1>
+        <ClosableAlert
+          open={alertOpen()}
+          severity="error"
+          onClose={() => setAlertOpen(false)}
+        >
+          {error()}
+        </ClosableAlert>
+        <TextField
+          label="Token"
+          variant="filled"
+          onInput={(e) => setToken(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <Button variant="contained" color="primary" onClick={login}>
+          Login
+        </Button>
       </div>
     </div>
   );

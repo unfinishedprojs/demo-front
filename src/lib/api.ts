@@ -9,7 +9,7 @@ import type {
   APISuggestUserResponse,
 } from "./types";
 
-const baseURL = "http://localhost:5000";
+const baseURL = "http://158.179.221.229:5000";
 
 /** assumes res.ok === false */
 async function handleError(requestType: string, res: Response) {

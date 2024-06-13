@@ -1,20 +1,50 @@
-import { createSignal } from "solid-js";
+import { createSignal, onMount } from "solid-js";
+import { useNavigate } from "@solidjs/router";
+import TextField from "@suid/material/TextField";
+import Button from "@suid/material/Button";
+import ThemeToggle from "../components/ThemeToggle";
 import api from "../lib/api";
 import "../css/form.css";
+import ClosableAlert from "../components/ClosableAlert";
 
 const RegisterPage = () => {
   const [discordId, setDiscordId] = createSignal("");
   const [inviteCode, setInviteCode] = createSignal("");
+  const [error, setError] = createSignal('');
+  const [alertOpen, setAlertOpen] = createSignal(false);
+  const navigate = useNavigate();
+
+  onMount(async () => {
+    if (!localStorage.getItem("token")) return;
+
+    try {
+      const response = await api.verifyToken(localStorage.getItem("token"));
+      if ("error" in response) {
+        console.log("Token in localStorage is invalid, ignoring...");
+      } else {
+        alert("Account found, you have been logged in");
+        navigate("/polls");
+      }
+    } catch (error) {}
+  });
 
   const register = async () => {
     try {
       const response = await api.register(inviteCode(), discordId());
       if ("error" in response) {
-        alert(`Registration failed: ${response.error}`);
+        if (response.status === 403) {
+          setError(response.maybeJson?.message);
+          return setAlertOpen(true);
+        } else if (response.status === 409) {
+          setError(response.maybeJson?.message);
+          return setAlertOpen(true);
+        } else {
+          setError(response.maybeJson?.message || 'Something went wrong!');
+          return setAlertOpen(true);
+        }
       } else {
         localStorage.setItem("token", response.token);
-        alert("Registration successful!");
-        window.location.href = `/polls`
+        navigate("/polls");
       }
     } catch (error) {
       alert("Registration failed!");
@@ -24,25 +54,34 @@ const RegisterPage = () => {
   return (
     <div class="container">
       <div class="floating-box">
-        <div class="p-4">
-          <h1 class="text-2xl">Register</h1>
-          <br></br>
-          <sl-input
-            label="Discord ID"
-            help-text="Your Discord ID"
-            onInput={(e) => setDiscordId(e.currentTarget.value)}
-          ></sl-input>
-          <br></br>
-          <sl-input
-            label="Invite"
-            help-text="Invite given to you"
-            onInput={(e) => setInviteCode(e.currentTarget.value)}
-          ></sl-input>
-          <br></br>
-          <sl-button variant="primary" onClick={register}>
-            Register
-          </sl-button>
-        </div>
+        <ThemeToggle />
+        <h1 class="text-2xl">Register</h1>
+        <ClosableAlert open={alertOpen()} severity="error" onClose={() => setAlertOpen(false)}>
+          {error()}
+        </ClosableAlert>
+        <TextField
+          label="Discord ID"
+          variant="filled"
+          onInput={(e) => setDiscordId(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Invite Code"
+          variant="filled"
+          onInput={(e) => setInviteCode(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
+        <Button variant="contained" color="primary" onClick={register}>
+          Register
+        </Button>
+        <p class="mt-4">
+          Already have an account?{" "}
+          <Button color="secondary" onClick={() => navigate("/login")}>
+            Login here
+          </Button>
+        </p>
       </div>
     </div>
   );

@@ -1,12 +1,17 @@
 import { createSignal, onMount } from "solid-js";
 import { useParams } from "@solidjs/router";
+import Button from "@suid/material/Button";
+import ThemeToggle from "../components/ThemeToggle";
 import api from "../lib/api";
-import type { APIIVoteNegResponse, APIIVotePosResponse } from "../lib/types";
+import type { APIIVotePosResponse, APIIVoteNegResponse } from "../lib/types";
 import "../css/form.css";
+import LogOutButton from "../components/LogOut";
+import { Stack } from "@suid/material";
+import HomeButton from "../components/HomeButton";
 
 const VotePage = () => {
-  const params = useParams<{ id: string }>();
-  const [poll, setPoll] = createSignal<any>(null);
+  const params = useParams();
+  const [poll, setPoll] = createSignal(null);
 
   onMount(async () => {
     try {
@@ -18,14 +23,13 @@ const VotePage = () => {
         alert(`Failed to fetch poll: ${response.error}`);
       } else {
         setPoll(response);
-        console.log(poll());
       }
     } catch (error) {
       alert("Failed to fetch poll!");
     }
   });
 
-  const vote = async (option: "yes" | "no") => {
+  const vote = async (option) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No token found");
@@ -36,39 +40,42 @@ const VotePage = () => {
         response = await api.voteNegative(token, params.id);
 
       if ("error" in response) {
-        console.log(response);
-
-        if (response.status === 406) return alert("Vote already cast. Ignored");
-
-        alert(`Failed to submit vote: ${response.error}`);
+        alert(`Vote failed: ${response.error}`);
       } else {
-        alert("Vote submitted!");
+        alert("Vote successful!");
       }
     } catch (error) {
-      alert("Failed to submit vote!");
+      alert("Vote failed!");
     }
   };
 
   return (
     <div class="container">
       <div class="floating-box">
-        <div class="p-4">
-          {poll() ? (
-            <>
-              <sl-avatar image={poll().discordPicture} loading="lazy"></sl-avatar> <h1 class="text-2xl">Vote in: {poll().discordUser}</h1>
-              <div class="flex gap-4 mt-4">
-                <sl-button variant="success" onClick={() => vote("yes")}>
-                  Vote yes
-                </sl-button>
-                <sl-button variant="danger" onClick={() => vote("no")}>
-                  Vote no
-                </sl-button>
-              </div>
-            </>
-          ) : (
-            <p>Loading poll...</p>
-          )}
-        </div>
+        <HomeButton color='action' /><ThemeToggle /> <LogOutButton />
+        {poll() ? (
+          <>
+            <h1 class="text-2xl">Vote in: {poll().discordUser}</h1>
+            <Stack spacing={2} direction="row">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => vote("yes")}
+              >
+                Yes
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => vote("no")}
+              >
+                No
+              </Button>
+            </Stack>
+          </>
+        ) : (
+          <p>Loading poll...</p>
+        )}
       </div>
     </div>
   );
