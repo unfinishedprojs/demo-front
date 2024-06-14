@@ -9,7 +9,7 @@ import type {
   APISuggestUserResponse,
 } from "./types";
 
-const baseURL = "http://158.179.221.229:80";
+const baseURL = "https://api.samu.lol";
 
 /** assumes res.ok === false */
 async function handleError(requestType: string, res: Response) {

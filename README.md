@@ -28,10 +28,11 @@ i'm using typescript because workin with untyped apis is pain.
 - [X] vote ui
 - [X] Create actual error alerts (Half done, missing voting page and suggestion page!)
 
-## v0.1.3
+## v0.1.3 (b)
 
 - Move to new domain
 - Move to new versioning system
+- (b) Fix domain
 
 ## v0.1.2
 
