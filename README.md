@@ -28,26 +28,6 @@ i'm using typescript because workin with untyped apis is pain.
 - [X] vote ui
 - [X] Create actual error alerts (Half done, missing voting page and suggestion page!)
 
-## v0.1.3 (b)
+## Updates
 
-- Move to new domain
-- Move to new versioning system
-- (b) Fix domain
-
-## v0.1.2
-
-- Fix error handling for voting page
-- Added new API endpoint
-
-## v0.1.1
-
-- Added AppBar, so that icons are now organized
-- Finished adding errors to all pages
-
-## v0.1.0
-
-- Stop using shoelace components, and use SUID components
-- Add light/dark mode (defaults to dark mode)
-- Add ClosableAlert component, so now the alerts wont be fullscreen popups, but closable boxes
-- Home button on logged in pages (home button just brings you to current events, might make actual dashboard at some point)
-- Log out button
+Check `UPDATES.md` for the list of updates.

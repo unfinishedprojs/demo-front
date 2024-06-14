@@ -9,7 +9,7 @@ import type {
   APISuggestUserResponse,
 } from "./types";
 
-const baseURL = "https://api.samu.lol";
+const baseURL = "https://api.samu.lol/api/v1";
 
 /** assumes res.ok === false */
 async function handleError(requestType: string, res: Response) {
@@ -71,24 +71,24 @@ async function awaitedGet(
 
 export const api = {
   verifyToken: async (token: string) => {
-    return (await awaitedPost("/api/v1/users/verify", {}, token)) as
+    return (await awaitedPost("/users/verify", {}, token)) as
       | APIUsersVerifyResponse
       | APIFetchError;
   },
   register: async (inviteCode: string, discordID: string) => {
-    return (await awaitedPost("/api/users/register", {
+    return (await awaitedPost("/users/register", {
       invite: inviteCode,
       discordId: discordID,
     })) as APIRegisterResponse | APIFetchError<APIRegisterErrorResponse>;
   },
   getInviteEvents: async (token: string, opts: Record<string, string> = {}) => {
-    return (await awaitedGet("/api/v1/ievents", opts, token)) as
+    return (await awaitedGet("/ievents", opts, token)) as
       | APIGetIEventsResponse
       | APIFetchError;
   },
   getInviteEvent: async (token: string, eventId: string) => {
     return (await awaitedGet(
-      "/api/v1/ievents/get",
+      "/ievents/get",
       {
         eventId: eventId,
       },
@@ -97,7 +97,7 @@ export const api = {
   },
   votePositive: async (token: string, eventId: string) => {
     return (await awaitedPost(
-      "/api/v1/ievents/vote/positive",
+      "/ievents/vote/positive",
       {
         eventId: eventId,
       },
@@ -106,7 +106,7 @@ export const api = {
   },
   voteNegative: async (token: string, eventId: string) => {
     return (await awaitedPost(
-      "/api/v1/ievents/vote/negative",
+      "/ievents/vote/negative",
       {
         eventId: eventId,
       },
@@ -114,7 +114,7 @@ export const api = {
     )) as APIIVotePosResponse | APIFetchError;
   },
   suggestUser: async (discordId: string, token: string) => {
-    return await awaitedPost("/api/v1/ievents/suggest", { discordId }, token) as APISuggestUserResponse | APIFetchError;
+    return await awaitedPost("/ievents/suggest", { discordId }, token) as APISuggestUserResponse | APIFetchError;
   },
 };
 export default api;
