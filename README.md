@@ -1,12 +1,16 @@
-# solidjs frontend for democracy server
-Democracy Server Voting Infra: frontend
-WIP, contribute or else!  
-  
-solidjs is very easy btw  
-https://docs.solidjs.com/quick-start  
-i'm using typescript because workin with untyped apis is pain.  
+# Demo-front
 
-## devinstall
+The web frontend for the demo-server project. 
+
+## Features
+
+- Login & Register
+- Save token in local storage (v1)
+- Load all available polls
+- Allow you to vote
+- Allow you to suggest new users
+
+## Developing
 - `npm i -g pnpm`
 - `git clone https://github.com/unfinishedprojs/demo-front`
 - `cd demo-front`
