@@ -54,7 +54,13 @@ const VotePage = () => {
         response = await api.voteNegative(token, params.id);
 
       if ("error" in response) {
-        alert(`Vote failed: ${response.error}`);
+        console.log(response)
+        setError(
+          response.maybeJson
+            ? response.maybeJson.error
+            : "Something went wrong!"
+        );
+        return setAlertOpen(true);
       } else {
         alert("Vote successful!");
       }

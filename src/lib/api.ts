@@ -9,7 +9,7 @@ import type {
   APISuggestUserResponse,
 } from "./types";
 
-const baseURL = "http://158.179.221.229:5000";
+const baseURL = "http://158.179.221.229:80";
 
 /** assumes res.ok === false */
 async function handleError(requestType: string, res: Response) {
@@ -71,7 +71,7 @@ async function awaitedGet(
 
 export const api = {
   verifyToken: async (token: string) => {
-    return (await awaitedPost("/api/users/verify", {}, token)) as
+    return (await awaitedPost("/api/v1/users/verify", {}, token)) as
       | APIUsersVerifyResponse
       | APIFetchError;
   },
@@ -82,13 +82,13 @@ export const api = {
     })) as APIRegisterResponse | APIFetchError<APIRegisterErrorResponse>;
   },
   getInviteEvents: async (token: string, opts: Record<string, string> = {}) => {
-    return (await awaitedGet("/api/ievents", opts, token)) as
+    return (await awaitedGet("/api/v1/ievents", opts, token)) as
       | APIGetIEventsResponse
       | APIFetchError;
   },
   getInviteEvent: async (token: string, eventId: string) => {
     return (await awaitedGet(
-      "/api/ievents/get",
+      "/api/v1/ievents/get",
       {
         eventId: eventId,
       },
@@ -97,7 +97,7 @@ export const api = {
   },
   votePositive: async (token: string, eventId: string) => {
     return (await awaitedPost(
-      "/api/ievents/vote/positive",
+      "/api/v1/ievents/vote/positive",
       {
         eventId: eventId,
       },
@@ -106,7 +106,7 @@ export const api = {
   },
   voteNegative: async (token: string, eventId: string) => {
     return (await awaitedPost(
-      "/api/ievents/vote/negative",
+      "/api/v1/ievents/vote/negative",
       {
         eventId: eventId,
       },
@@ -114,7 +114,7 @@ export const api = {
     )) as APIIVotePosResponse | APIFetchError;
   },
   suggestUser: async (discordId: string, token: string) => {
-    return await awaitedPost("/api/ievents/suggest", { discordId }, token) as APISuggestUserResponse | APIFetchError;
+    return await awaitedPost("/api/v1/ievents/suggest", { discordId }, token) as APISuggestUserResponse | APIFetchError;
   },
 };
 export default api;
