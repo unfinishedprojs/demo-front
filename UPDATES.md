@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Correct API library base URL
+
 ## 0.2.0
 
 - Change authentication system to new passworded one

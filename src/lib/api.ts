@@ -9,7 +9,7 @@ import type {
   APISuggestUserResponse,
 } from "./types";
 
-const baseURL = "http://localhost:5000/api/v2";
+const baseURL = "https://api.samu.lol/api/v2";
 
 /** assumes res.ok === false */
 async function handleError(requestType: string, res: Response) {
