@@ -1,3 +1,7 @@
+## 0.2.3
+
+- Fix profile pictures not loading in polls page
+
 ## 0.2.2
 
 - Add proper routing for register page

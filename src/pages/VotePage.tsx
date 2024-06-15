@@ -1,5 +1,5 @@
 import { Show, createSignal, onMount } from "solid-js";
-import { useParams } from "@solidjs/router";
+import { useNavigate, useParams } from "@solidjs/router";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
 import type {
@@ -26,6 +26,7 @@ const VotePage = () => {
 
   const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
+  const navigate = useNavigate();
 
   onMount(async () => {
     try {
@@ -71,6 +72,7 @@ const VotePage = () => {
         return setAlertOpen(true);
       } else {
         alert("Vote successful!");
+        navigate("/polls");
       }
     } catch (error) {
       alert("Vote failed!");

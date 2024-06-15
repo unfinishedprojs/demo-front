@@ -97,7 +97,7 @@ const EndedPage = () => {
                       <ListItemAvatar>
                         <Avatar
                           alt={poll.discordSlug}
-                          src={poll.discordPicture}
+                          src={poll.discordPfpUrl}
                         />
                       </ListItemAvatar>
                       <ListItemText
