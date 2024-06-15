@@ -1,3 +1,7 @@
+## 0.2.2
+
+- Add proper routing for register page
+
 ## 0.2.1
 
 - Correct API library base URL

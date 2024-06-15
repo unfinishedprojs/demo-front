@@ -44,6 +44,7 @@ function App() {
         <Route path="/login" component={LoginPage} />
         <Route path="/polls" component={PollsPage} />
         <Route path="/ended" component={EndedPage} />
+        <Route path="/register" component={RegisterPage} />
         <Route path="/vote/:id" component={VotePage} />
         <Route path="/suggest" component={SuggestUserPage} />
       </Router>

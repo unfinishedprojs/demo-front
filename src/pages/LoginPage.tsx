@@ -105,7 +105,7 @@ const LoginPage = () => {
         </Button>
         <p class="mt-4">
           Don't have an account just yet?{" "}
-          <Button color="secondary" onClick={() => navigate("/login")}>
+          <Button color="secondary" onClick={() => navigate("/register")}>
             Register here
           </Button>
         </p>

@@ -54,11 +54,7 @@ const RegisterPage = () => {
         }
       } else {
         console.log(response);
-        localStorage.setItem("token", response.token);
-        localStorage.setItem("discordUser", response.discordUser);
-        localStorage.setItem("discordSlug", response.discordSlug);
-        localStorage.setItem("discordPfpUrl", response.discordPfpUrl);
-        navigate("/polls");
+        navigate("/login");
       }
     } catch (error) {
       alert("Registration failed!");
