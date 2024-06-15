@@ -9,7 +9,8 @@ import { Box, Container } from "@suid/material";
 import NoLoginAppBar from "../components/NoLoginAppBar";
 
 const LoginPage = () => {
-  const [token, setToken] = createSignal("");
+  const [discordId, setDiscordId] = createSignal("");
+  const [password, setPassword] = createSignal("");
   const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const LoginPage = () => {
 
   const login = async () => {
     try {
-      const response = await api.verifyToken(token());
+      const response = await api.login(password(), discordId());
       if ("error" in response) {
         if (response.status === 403) {
           setError(response.maybeJson?.message);
@@ -39,11 +40,19 @@ const LoginPage = () => {
           setError(response.maybeJson?.message);
           return setAlertOpen(true);
         } else {
-          setError(response.maybeJson ? response.maybeJson.error : "Something went wrong!");
+          setError(
+            response.maybeJson
+              ? response.maybeJson.error
+              : "Something went wrong!"
+          );
           return setAlertOpen(true);
         }
       } else {
+        console.log(response);
         localStorage.setItem("token", response.token);
+        localStorage.setItem("discordUser", response.discordUser);
+        localStorage.setItem("discordSlug", response.discordSlug);
+        localStorage.setItem("discordPfpUrl", response.discordPfpUrl);
         navigate("/polls");
       }
     } catch (error) {
@@ -54,38 +63,54 @@ const LoginPage = () => {
 
   return (
     // <Layout>
-      <Container maxWidth="sm">
-        <Box
-          sx={{
-            bgcolor: "box.box",
-            width: "50vh",
-            p: '20px',
-            border: '1px solid box.box',
-            borderRadius: '8px'
-          }}
+    <Container maxWidth="sm">
+      <Box
+        sx={{
+          bgcolor: "box.box",
+          width: "50vh",
+          p: "20px",
+          border: "1px solid box.box",
+          borderRadius: "8px",
+        }}
+      >
+        <NoLoginAppBar />
+        <br />
+        <h1 class="text-2xl">Login</h1>
+        <ClosableAlert
+          open={alertOpen()}
+          severity="error"
+          onClose={() => setAlertOpen(false)}
         >
-          <NoLoginAppBar />
-          <br />
-          <h1 class="text-2xl">Login</h1>
-          <ClosableAlert
-            open={alertOpen()}
-            severity="error"
-            onClose={() => setAlertOpen(false)}
-          >
-            {error()}
-          </ClosableAlert>
-          <TextField
-            label="Token"
-            variant="filled"
-            onInput={(e) => setToken((e.target as HTMLInputElement).value)}
-            fullWidth
-            margin="normal"
-          />
-          <Button variant="contained" color="primary" onClick={login}>
-            Login
+          {error()}
+        </ClosableAlert>
+        <TextField
+          required
+          label="Discord ID"
+          variant="filled"
+          onInput={(e) => setDiscordId((e.target as HTMLInputElement).value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          required
+          type="password"
+          label="Password"
+          variant="filled"
+          onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
+          fullWidth
+          margin="normal"
+        />
+        <Button variant="contained" color="primary" onClick={login}>
+          Login
+        </Button>
+        <p class="mt-4">
+          Don't have an account just yet?{" "}
+          <Button color="secondary" onClick={() => navigate("/login")}>
+            Register here
           </Button>
-        </Box>
-      </Container>
+        </p>
+      </Box>
+    </Container>
     // </Layout>
   );
 };

@@ -1,3 +1,8 @@
+## 0.2.0
+
+- Change authentication system to new passworded one
+- Show which events are active and which are not
+
 ## 0.1.4
 
 - Edit API library so that the API version is specified on the baseurl

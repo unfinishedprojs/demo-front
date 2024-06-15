@@ -9,7 +9,7 @@ import type {
   APISuggestUserResponse,
 } from "./types";
 
-const baseURL = "https://api.samu.lol/api/v1";
+const baseURL = "http://localhost:5000/api/v2";
 
 /** assumes res.ok === false */
 async function handleError(requestType: string, res: Response) {
@@ -70,15 +70,21 @@ async function awaitedGet(
 }
 
 export const api = {
-  verifyToken: async (token: string) => {
-    return (await awaitedPost("/users/verify", {}, token)) as
+  login: async (password: string, discordId: string) => {
+    return (await awaitedPost("/users/login", { password, discordId })) as
       | APIUsersVerifyResponse
       | APIFetchError;
   },
-  register: async (inviteCode: string, discordID: string) => {
+  verifyToken: async (token: string) => {
+    return (await awaitedPost("/users/login", {}, token)) as
+      | APIUsersVerifyResponse
+      | APIFetchError;
+  },
+  register: async (inviteCode: string, discordId: string, password: string) => {
     return (await awaitedPost("/users/register", {
       invite: inviteCode,
-      discordId: discordID,
+      discordId,
+      password,
     })) as APIRegisterResponse | APIFetchError<APIRegisterErrorResponse>;
   },
   getInviteEvents: async (token: string, opts: Record<string, string> = {}) => {
@@ -114,7 +120,9 @@ export const api = {
     )) as APIIVotePosResponse | APIFetchError;
   },
   suggestUser: async (discordId: string, token: string) => {
-    return await awaitedPost("/ievents/suggest", { discordId }, token) as APISuggestUserResponse | APIFetchError;
+    return (await awaitedPost("/ievents/suggest", { discordId }, token)) as
+      | APISuggestUserResponse
+      | APIFetchError;
   },
 };
 export default api;

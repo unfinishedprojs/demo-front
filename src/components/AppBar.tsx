@@ -22,10 +22,19 @@ const AppBar = () => {
     "Cute people only!",
     "Samu was here :)",
     "Exploding in 3, 2, 1...",
-    "Streaming your IP to the world",
+    "Streaming your IP to the world!",
     "Have you watched Updog?",
     "Rewrite 4143262 of the frontend!",
-    "If you turn on lightmode, you loose access to polls!"
+    "If you turn on lightmode, you lose access to polls!",
+    "This code is held together by duct tape.",
+    "Do not feed the bugs.",
+    "Isn't Jelqing that Genshit Impact character…",
+    "Temporarily permanent.",
+    "Hit any key to continue.",
+    "The cake is a lie.",
+    "Donald Trump please, please save me from Vencord",
+    "It's not a bug, it's (probably) a feature.",
+    "Bet you can't find the Easter egg.",
   ];
 
   const handleAvatarClick = (event) => {
@@ -52,6 +61,11 @@ const AppBar = () => {
     handleClose();
   };
 
+  const handleEnded = () => {
+    navigate("/ended");
+    handleClose();
+  };
+
   const handleDemoInfraClick = () => {
     const randomIndex = Math.floor(Math.random() * demoInfraTexts.length);
     setDemoInfraIndex(randomIndex);
@@ -71,9 +85,15 @@ const AppBar = () => {
         <Button variant="text" onClick={handlePolls}>
           Polls
         </Button>
+        <Button variant="text" onClick={handleEnded}>
+          Ended
+        </Button>
         <ThemeToggle />
         <IconButton onClick={handleAvatarClick}>
-          <Avatar alt="User Avatar" src="/path/to/avatar.jpg" />
+          <Avatar
+            alt={localStorage.getItem("discordSlug")}
+            src={localStorage.getItem("discordPfpUrl")}
+          />
         </IconButton>
         <Menu
           anchorEl={anchorEl()}
@@ -88,7 +108,7 @@ const AppBar = () => {
             horizontal: "right",
           }}
         >
-          <MenuItem onClick={handleDashboard}>Dashboard</MenuItem>
+          {/* <MenuItem onClick={handleDashboard}>Dashboard</MenuItem> */}
           <MenuItem onClick={handleLogout}>Log Out</MenuItem>
         </Menu>
       </Toolbar>

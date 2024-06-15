@@ -10,6 +10,7 @@ import { Container, Box } from "@suid/material";
 
 const RegisterPage = () => {
   const [discordId, setDiscordId] = createSignal("");
+  const [password, setPassword] = createSignal("");
   const [inviteCode, setInviteCode] = createSignal("");
   const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
@@ -31,7 +32,11 @@ const RegisterPage = () => {
 
   const register = async () => {
     try {
-      const response = await api.register(inviteCode(), discordId());
+      const response = await api.register(
+        inviteCode(),
+        discordId(),
+        password()
+      );
       if ("error" in response) {
         if (response.status === 403) {
           setError(response.maybeJson?.message);
@@ -40,11 +45,19 @@ const RegisterPage = () => {
           setError(response.maybeJson?.message);
           return setAlertOpen(true);
         } else {
-          setError(response.maybeJson ? response.maybeJson.error : "Something went wrong!");
+          setError(
+            response.maybeJson
+              ? response.maybeJson.error
+              : "Something went wrong!"
+          );
           return setAlertOpen(true);
         }
       } else {
+        console.log(response);
         localStorage.setItem("token", response.token);
+        localStorage.setItem("discordUser", response.discordUser);
+        localStorage.setItem("discordSlug", response.discordSlug);
+        localStorage.setItem("discordPfpUrl", response.discordPfpUrl);
         navigate("/polls");
       }
     } catch (error) {
@@ -72,6 +85,7 @@ const RegisterPage = () => {
           {error()}
         </ClosableAlert>
         <TextField
+          required
           label="Discord ID"
           variant="filled"
           onInput={(e) => setDiscordId((e.target as HTMLInputElement).value)}
@@ -79,9 +93,21 @@ const RegisterPage = () => {
           margin="normal"
         />
         <TextField
+          required
+          type="password"
+          label="Password"
+          variant="filled"
+          onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          required
           label="Invite Code"
           variant="filled"
-          onInput={(e: Event) => setInviteCode((e.target as HTMLInputElement).value)}
+          onInput={(e: Event) =>
+            setInviteCode((e.target as HTMLInputElement).value)
+          }
           fullWidth
           margin="normal"
         />

@@ -20,12 +20,18 @@ export interface APIFetchError<T extends Object = Record<string, string>> {
 }
 
 export interface APIUsersVerifyResponse {
+  discordPfpUrl: string;
+  discordSlug: string;
+  discordUser: string;
   discordId: string;
   token: string;
   admin: null;
 }
 
 export interface APIRegisterResponse {
+  discordPfpUrl: string;
+  discordSlug: string;
+  discordUser: string;
   token: string;
   invite: string;
   iEventID: string;
@@ -60,7 +66,7 @@ export interface APISuggestUserResponse {
   discordId?: string;
   eventId?: string;
   invite?: string;
-  discordPicture?: string,
+  discordPicture?: string;
   ended?: boolean;
   createdAt?: Date;
   duration?: number;

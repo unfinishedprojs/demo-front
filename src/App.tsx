@@ -6,34 +6,35 @@ import VotePage from "./pages/VotePage";
 import SuggestUserPage from "./pages/SuggestUserPage";
 import { ThemeProvider, createTheme, type Theme } from "@suid/material";
 import { theme as themeGeneral } from "./components/ThemeToggle";
+import EndedPage from "./pages/EndedPage";
 
 function App() {
   let theme: Theme<string>;
 
-  if(themeGeneral() === 'dark') {
+  if (themeGeneral() === "dark") {
     theme = createTheme({
       palette: {
-        mode: 'dark',
+        mode: "dark",
         box: {
           main: "#222222",
           box: "#333",
           border: "#444",
-          text: "#fff"
-        }
+          text: "#fff",
+        },
       },
-    })
+    });
   } else {
     theme = createTheme({
       palette: {
-        mode: 'light',
+        mode: "light",
         box: {
           main: "#ffffff",
           box: "#f0f0f0",
           border: "#ccc",
-          text: "#000"
-        }
+          text: "#000",
+        },
       },
-    })
+    });
   }
 
   return (
@@ -42,6 +43,7 @@ function App() {
         <Route path="/" component={RegisterPage} />
         <Route path="/login" component={LoginPage} />
         <Route path="/polls" component={PollsPage} />
+        <Route path="/ended" component={EndedPage} />
         <Route path="/vote/:id" component={VotePage} />
         <Route path="/suggest" component={SuggestUserPage} />
       </Router>

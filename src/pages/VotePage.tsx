@@ -1,10 +1,15 @@
-import { createSignal, onMount } from "solid-js";
+import { Show, createSignal, onMount } from "solid-js";
 import { useParams } from "@solidjs/router";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
-import type { APIIVotePosResponse, APIIVoteNegResponse, APIFetchError } from "../lib/types";
+import type {
+  APIIVotePosResponse,
+  APIIVoteNegResponse,
+  APIFetchError,
+} from "../lib/types";
 import "../css/form.css";
 import {
+  Alert,
   Avatar,
   Box,
   CircularProgress,
@@ -48,13 +53,16 @@ const VotePage = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No token found");
 
-      let response: APIIVotePosResponse | APIIVoteNegResponse | APIFetchError<Record<string, string>>;
+      let response:
+        | APIIVotePosResponse
+        | APIIVoteNegResponse
+        | APIFetchError<Record<string, string>>;
       if (option === "yes") response = await api.votePositive(token, params.id);
       else if (option === "no")
         response = await api.voteNegative(token, params.id);
 
       if ("error" in response) {
-        console.log(response)
+        console.log(response);
         setError(
           response.maybeJson
             ? response.maybeJson.error
@@ -83,8 +91,8 @@ const VotePage = () => {
         {poll() ? (
           <>
             <Avatar
-              alt={poll().discordUser}
-              src={poll().discordPicture}
+              alt={poll().discordSlug}
+              src={poll().discordPfpUrl}
               sx={{ width: 56, height: 56, mx: "auto", mb: 2 }}
             />
             <Typography gutterBottom variant="h4">
@@ -107,6 +115,10 @@ const VotePage = () => {
             >
               {error()}
             </ClosableAlert>
+
+            <Show when={poll().ended === true}>
+              <Alert severity="error">This poll has ended!</Alert>
+            </Show>
 
             <Stack
               spacing={2}

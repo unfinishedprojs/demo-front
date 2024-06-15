@@ -19,7 +19,7 @@ import {
 import AppBar from "../components/AppBar";
 import ClosableAlert from "../components/ClosableAlert";
 
-const PollsPage = () => {
+const EndedPage = () => {
   const [polls, setPolls] = createSignal([]);
   const [loading, setLoading] = createSignal(true);
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const PollsPage = () => {
     try {
       const response = await api.getInviteEvents(
         localStorage.getItem("token"),
-        { active: "false" }
+        { active: "true" }
       );
       if ("error" in response) {
         setError(
@@ -61,7 +61,7 @@ const PollsPage = () => {
       >
         <AppBar />
         <Typography variant="h6" p="10px">
-          Polls
+          Polls that have ended
         </Typography>
         <ClosableAlert
           open={alertOpen()}
@@ -123,4 +123,4 @@ const PollsPage = () => {
   );
 };
 
-export default PollsPage;
+export default EndedPage;
