@@ -3,10 +3,10 @@ import { useNavigate } from "@solidjs/router";
 import TextField from "@suid/material/TextField";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
-import "../css/form.css";
 import ClosableAlert from "../components/ClosableAlert";
-import { Box, Container } from "@suid/material";
+import { Box, Container, CssBaseline } from "@suid/material";
 import NoLoginAppBar from "../components/NoLoginAppBar";
+import Footer from "../components/Footer";
 
 const LoginPage = () => {
   const [discordId, setDiscordId] = createSignal("");
@@ -62,8 +62,15 @@ const LoginPage = () => {
   };
 
   return (
-    // <Layout>
-    <Container maxWidth="sm">
+    <Container
+      maxWidth="sm"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        minHeight: "100vh",
+      }}
+    >
       <Box
         sx={{
           bgcolor: "box.box",
@@ -110,8 +117,8 @@ const LoginPage = () => {
           </Button>
         </p>
       </Box>
+      <Footer sx={{ mt: 2, mb: 4 }} />
     </Container>
-    // </Layout>
   );
 };
 

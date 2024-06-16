@@ -19,6 +19,11 @@ export interface APIFetchError<T extends Object = Record<string, string>> {
   maybeJson?: T;
 }
 
+export interface APIGetApiInfo {
+  message: string;
+  version: string;
+}
+
 export interface APIUsersVerifyResponse {
   discordPfpUrl: string;
   discordSlug: string;

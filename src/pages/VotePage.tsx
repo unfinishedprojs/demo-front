@@ -19,6 +19,7 @@ import {
 } from "@suid/material";
 import AppBar from "../components/AppBar";
 import ClosableAlert from "../components/ClosableAlert";
+import Footer from "../components/Footer";
 
 const VotePage = () => {
   const params = useParams();
@@ -80,7 +81,15 @@ const VotePage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container
+      maxWidth="sm"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        minHeight: "100vh",
+      }}
+    >
       <Box
         sx={{
           bgcolor: "box.box",
@@ -148,6 +157,7 @@ const VotePage = () => {
           <CircularProgress />
         )}
       </Box>
+      <Footer sx={{ mt: 2, mb: 4 }} />
     </Container>
   );
 };

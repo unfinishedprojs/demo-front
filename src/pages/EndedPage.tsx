@@ -18,6 +18,7 @@ import {
 } from "@suid/material";
 import AppBar from "../components/AppBar";
 import ClosableAlert from "../components/ClosableAlert";
+import Footer from "../components/Footer";
 
 const EndedPage = () => {
   const [polls, setPolls] = createSignal([]);
@@ -50,7 +51,15 @@ const EndedPage = () => {
   });
 
   return (
-    <Container maxWidth="sm">
+    <Container
+      maxWidth="sm"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        minHeight: "100vh",
+      }}
+    >
       <Box
         sx={{
           bgcolor: "box.box",
@@ -119,6 +128,7 @@ const EndedPage = () => {
           Suggest new user
         </Button>
       </Box>
+      <Footer sx={{ mt: 2, mb: 4 }} />
     </Container>
   );
 };

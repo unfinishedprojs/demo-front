@@ -1,3 +1,8 @@
+## 0.2.4
+
+- Sorry to anyone that might've noticed (probably not), but fixed boxes being offcentered
+- Added a footer with version of the frontend and the backend
+
 ## 0.2.3
 
 - Fix profile pictures not loading in polls page

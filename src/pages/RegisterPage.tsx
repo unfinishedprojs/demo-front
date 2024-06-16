@@ -7,6 +7,7 @@ import "../css/form.css";
 import ClosableAlert from "../components/ClosableAlert";
 import NoLoginAppBar from "../components/NoLoginAppBar";
 import { Container, Box } from "@suid/material";
+import Footer from "../components/Footer";
 
 const RegisterPage = () => {
   const [discordId, setDiscordId] = createSignal("");
@@ -62,7 +63,15 @@ const RegisterPage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container
+      maxWidth="sm"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        minHeight: "100vh",
+      }}
+    >
       <Box
         sx={{
           bgcolor: "box.box",
@@ -117,6 +126,7 @@ const RegisterPage = () => {
           </Button>
         </p>
       </Box>
+      <Footer sx={{ mt: 2, mb: 4 }} />
     </Container>
   );
 };

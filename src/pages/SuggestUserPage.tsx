@@ -6,6 +6,7 @@ import "../css/form.css";
 import AppBar from "../components/AppBar";
 import { Container, Box } from "@suid/material";
 import ClosableAlert from "../components/ClosableAlert";
+import Footer from "../components/Footer";
 
 const SuggestUserPage = () => {
   const [discordId, setDiscordId] = createSignal("");
@@ -23,7 +24,11 @@ const SuggestUserPage = () => {
 
       const response = await api.suggestUser(discordId(), token);
       if ("error" in response) {
-        setError(response.maybeJson ? response.maybeJson.error : "Something went wrong!");
+        setError(
+          response.maybeJson
+            ? response.maybeJson.error
+            : "Something went wrong!"
+        );
         return setAlertOpen(true);
       } else {
         if (!response.duration) {
@@ -40,7 +45,15 @@ const SuggestUserPage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container
+      maxWidth="sm"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        minHeight: "100vh",
+      }}
+    >
       <Box
         sx={{
           bgcolor: "box.box",
@@ -69,6 +82,7 @@ const SuggestUserPage = () => {
           Suggest User
         </Button>
       </Box>
+      <Footer sx={{ mt: 2, mb: 4 }} />
     </Container>
   );
 };

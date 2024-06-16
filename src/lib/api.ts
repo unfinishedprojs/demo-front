@@ -7,9 +7,10 @@ import type {
   APIIVotePosResponse,
   APIGetIEventsResponse,
   APISuggestUserResponse,
+  APIGetApiInfo,
 } from "./types";
 
-const baseURL = "https://api.samu.lol/api/v2";
+const baseURL = "https://api.samu.lol";
 
 /** assumes res.ok === false */
 async function handleError(requestType: string, res: Response) {
@@ -71,30 +72,34 @@ async function awaitedGet(
 
 export const api = {
   login: async (password: string, discordId: string) => {
-    return (await awaitedPost("/users/login", { password, discordId })) as
-      | APIUsersVerifyResponse
-      | APIFetchError;
+    return (await awaitedPost("/api/v2/users/login", {
+      password,
+      discordId,
+    })) as APIUsersVerifyResponse | APIFetchError;
   },
   verifyToken: async (token: string) => {
-    return (await awaitedPost("/users/login", {}, token)) as
+    return (await awaitedPost("/api/v2/users/", {}, token)) as
       | APIUsersVerifyResponse
       | APIFetchError;
   },
   register: async (inviteCode: string, discordId: string, password: string) => {
-    return (await awaitedPost("/users/register", {
+    return (await awaitedPost("/api/v2/users/register", {
       invite: inviteCode,
       discordId,
       password,
     })) as APIRegisterResponse | APIFetchError<APIRegisterErrorResponse>;
   },
+  getApiInfo: async () => {
+    return (await awaitedGet("/")) as APIGetApiInfo | APIFetchError;
+  },
   getInviteEvents: async (token: string, opts: Record<string, string> = {}) => {
-    return (await awaitedGet("/ievents", opts, token)) as
+    return (await awaitedGet("/api/v2/ievents", opts, token)) as
       | APIGetIEventsResponse
       | APIFetchError;
   },
   getInviteEvent: async (token: string, eventId: string) => {
     return (await awaitedGet(
-      "/ievents/get",
+      "/api/v2/ievents/get",
       {
         eventId: eventId,
       },
@@ -103,7 +108,7 @@ export const api = {
   },
   votePositive: async (token: string, eventId: string) => {
     return (await awaitedPost(
-      "/ievents/vote/positive",
+      "/api/v2/ievents/vote/positive",
       {
         eventId: eventId,
       },
@@ -112,7 +117,7 @@ export const api = {
   },
   voteNegative: async (token: string, eventId: string) => {
     return (await awaitedPost(
-      "/ievents/vote/negative",
+      "/api/v2/ievents/vote/negative",
       {
         eventId: eventId,
       },
@@ -120,9 +125,11 @@ export const api = {
     )) as APIIVotePosResponse | APIFetchError;
   },
   suggestUser: async (discordId: string, token: string) => {
-    return (await awaitedPost("/ievents/suggest", { discordId }, token)) as
-      | APISuggestUserResponse
-      | APIFetchError;
+    return (await awaitedPost(
+      "/api/v2/ievents/suggest",
+      { discordId },
+      token
+    )) as APISuggestUserResponse | APIFetchError;
   },
 };
 export default api;
