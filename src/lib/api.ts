@@ -93,7 +93,7 @@ export const api = {
     return (await awaitedGet("/")) as APIGetApiInfo | APIFetchError;
   },
   getInviteEvents: async (token: string, opts: Record<string, string> = {}) => {
-    return (await awaitedGet("/api/v2/ievents", opts, token)) as
+    return (await awaitedGet("/api/v2/ievents/getall", opts, token)) as
       | APIGetIEventsResponse
       | APIFetchError;
   },

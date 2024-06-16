@@ -1,9 +1,9 @@
 {
   "name": "demo-front",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private": true,
   "scripts": {
-    "dev": "vite --host",
+    "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
   },

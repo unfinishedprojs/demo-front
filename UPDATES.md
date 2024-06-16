@@ -1,3 +1,7 @@
+## 0.2.5
+
+- Fixed an endpoint being renamed
+
 ## 0.2.4
 
 - Sorry to anyone that might've noticed (probably not), but fixed boxes being offcentered
