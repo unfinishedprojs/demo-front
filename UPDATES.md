@@ -1,3 +1,7 @@
+## 0.2.9
+
+- Invites can now be added to the end of a register link (Example: `https://demo.samu.lol/#/register?invite=EXAMPLE`)
+
 ## 0.2.8
 
 - Admins can now see the invite for each poll
