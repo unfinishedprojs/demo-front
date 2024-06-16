@@ -40,10 +40,10 @@ const RegisterPage = () => {
       );
       if ("error" in response) {
         if (response.status === 403) {
-          setError(response.maybeJson?.message);
+          setError(response.maybeJson?.error);
           return setAlertOpen(true);
         } else if (response.status === 409) {
-          setError(response.maybeJson?.message);
+          setError(response.maybeJson?.error);
           return setAlertOpen(true);
         } else {
           setError(

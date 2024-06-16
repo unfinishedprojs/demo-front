@@ -34,10 +34,10 @@ const LoginPage = () => {
       const response = await api.login(password(), discordId());
       if ("error" in response) {
         if (response.status === 403) {
-          setError(response.maybeJson?.message);
+          setError(response.maybeJson?.error);
           return setAlertOpen(true);
         } else if (response.status === 400) {
-          setError(response.maybeJson?.message);
+          setError(response.maybeJson?.error);
           return setAlertOpen(true);
         } else {
           setError(

@@ -1,3 +1,7 @@
+## 0.2.6
+
+- Fixed some errors not appearing in login and register page
+
 ## 0.2.5
 
 - Fixed an endpoint being renamed
