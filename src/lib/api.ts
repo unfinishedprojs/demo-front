@@ -78,7 +78,7 @@ export const api = {
     })) as APIUsersVerifyResponse | APIFetchError;
   },
   verifyToken: async (token: string) => {
-    return (await awaitedPost("/api/v2/users/", {}, token)) as
+    return (await awaitedGet("/api/v2/users/get", {}, token)) as
       | APIUsersVerifyResponse
       | APIFetchError;
   },

@@ -1,4 +1,4 @@
-import { Route, Router } from "@solidjs/router";
+import { HashRouter as Router, Route } from "@solidjs/router";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import PollsPage from "./pages/PollsPage";

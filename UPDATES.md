@@ -1,3 +1,8 @@
+## 0.2.7
+
+- Attempt to fix broken routing using hash router.
+- Fix user get
+
 ## 0.2.6
 
 - Fixed some errors not appearing in login and register page

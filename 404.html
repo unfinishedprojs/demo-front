@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found</title>
+  <script>
+    // Script to redirect to the correct route
+    const redirect = () => {
+      const pathname = window.location.pathname;
+      if (pathname !== '/') {
+        window.location.replace(`/#${pathname}`);
+      }
+    };
+    redirect();
+  </script>
+</head>
+<body>
+  <h1>Page Not Found</h1>
+  <p>Redirecting...</p>
+</body>
+</html>
