@@ -1,3 +1,8 @@
+## 0.2.8
+
+- Admins can now see the invite for each poll
+- Poll buttons become disabled once it ends
+
 ## 0.2.7
 
 - Attempt to fix broken routing using hash router.

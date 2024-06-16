@@ -43,6 +43,7 @@ const VotePage = () => {
         );
         return setAlertOpen(true);
       } else {
+        console.log(response)
         setPoll(response);
       }
     } catch (error) {
@@ -119,6 +120,12 @@ const VotePage = () => {
               {`Negative votes: ${poll().negativeVotesInt}`}
             </Typography>
 
+            <Show when={poll().invite}>
+            <Typography gutterBottom variant="body1" color="textSecondary">
+              {`(ADMIN) Invite: ${poll().invite}`}
+            </Typography>
+            </Show>
+
             <ClosableAlert
               open={alertOpen()}
               severity="error"
@@ -131,6 +138,7 @@ const VotePage = () => {
               <Alert severity="error">This poll has ended!</Alert>
             </Show>
 
+            <Show when={poll().ended === false}>
             <Stack
               spacing={2}
               direction="row"
@@ -152,6 +160,32 @@ const VotePage = () => {
                 No
               </Button>
             </Stack>
+            </Show>
+          <Show when={poll().ended === true}>
+            <Stack
+              spacing={2}
+              direction="row"
+              justifyContent="center"
+              sx={{ mt: 2 }}
+            >
+              <Button
+                disabled
+                variant="contained"
+                color="primary"
+                onClick={() => vote("yes")}
+              >
+                Yes
+              </Button>
+              <Button
+                disabled
+                variant="contained"
+                color="error"
+                onClick={() => vote("no")}
+              >
+                No
+              </Button>
+            </Stack>
+            </Show>
           </>
         ) : (
           <CircularProgress />
