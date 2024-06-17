@@ -171,7 +171,7 @@ const VotePage = () => {
                 </Button>
               </Stack>
             </Show>
-            <Show when={poll().ended === false}>
+            <Show when={poll().voted === false && poll().ended === false}>
               <Stack
                 spacing={2}
                 direction="row"

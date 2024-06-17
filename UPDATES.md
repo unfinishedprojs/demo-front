@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Fixed bug where additional buttons are randomly added
+
 ## 0.3.1
 
 - Fixed bug where buttons to vote on users disappeared (?)
