@@ -111,7 +111,9 @@ const PollsPage = () => {
                       </ListItemAvatar>
                       <ListItemText
                         primary={
-                          poll.discordUser +
+                          (poll.discordUser !== null
+                            ? poll.discordUser
+                            : poll.discordSlug) +
                           " | +" +
                           poll.positiveVotesInt +
                           " | -" +

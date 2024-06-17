@@ -43,7 +43,7 @@ const VotePage = () => {
         );
         return setAlertOpen(true);
       } else {
-        console.log(response)
+        console.log(response);
         setPoll(response);
       }
     } catch (error) {
@@ -108,7 +108,10 @@ const VotePage = () => {
               sx={{ width: 56, height: 56, mx: "auto", mb: 2 }}
             />
             <Typography gutterBottom variant="h4">
-              Vote in: {poll().discordUser}
+              Vote in:{" "}
+              {poll().discordUser !== null
+                ? poll().discordUser
+                : poll().discordSlug}
             </Typography>
             <Typography gutterBottom variant="body1" color="textSecondary">
               {`Full username: ${poll().discordSlug}`}
@@ -121,9 +124,9 @@ const VotePage = () => {
             </Typography>
 
             <Show when={poll().invite}>
-            <Typography gutterBottom variant="body1" color="textSecondary">
-              {`(ADMIN) Invite: ${poll().invite}`}
-            </Typography>
+              <Typography gutterBottom variant="body1" color="textSecondary">
+                {`(ADMIN) Invite: ${poll().invite}`}
+              </Typography>
             </Show>
 
             <ClosableAlert
@@ -136,55 +139,80 @@ const VotePage = () => {
 
             <Show when={poll().ended === true}>
               <Alert severity="error">This poll has ended!</Alert>
+
+              <Stack
+                spacing={2}
+                direction="row"
+                justifyContent="center"
+                sx={{ mt: 2 }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => vote("yes")}
+                >
+                  Yes
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => vote("no")}
+                >
+                  No
+                </Button>
+              </Stack>
             </Show>
 
-            <Show when={poll().ended === false}>
-            <Stack
-              spacing={2}
-              direction="row"
-              justifyContent="center"
-              sx={{ mt: 2 }}
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => vote("yes")}
+            <Show when={poll().voted === true && poll().ended === false}>
+              <Alert severity="error">You already voted!</Alert>
+              <Stack
+                spacing={2}
+                direction="row"
+                justifyContent="center"
+                sx={{ mt: 2 }}
               >
-                Yes
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => vote("no")}
-              >
-                No
-              </Button>
-            </Stack>
+                <Button
+                  disabled
+                  variant="contained"
+                  color="primary"
+                  onClick={() => vote("yes")}
+                >
+                  Yes
+                </Button>
+                <Button
+                  disabled
+                  variant="contained"
+                  color="error"
+                  onClick={() => vote("no")}
+                >
+                  No
+                </Button>
+              </Stack>
             </Show>
-          <Show when={poll().ended === true}>
-            <Stack
-              spacing={2}
-              direction="row"
-              justifyContent="center"
-              sx={{ mt: 2 }}
-            >
-              <Button
-                disabled
-                variant="contained"
-                color="primary"
-                onClick={() => vote("yes")}
+            <Show when={poll().ended === true}>
+              <Stack
+                spacing={2}
+                direction="row"
+                justifyContent="center"
+                sx={{ mt: 2 }}
               >
-                Yes
-              </Button>
-              <Button
-                disabled
-                variant="contained"
-                color="error"
-                onClick={() => vote("no")}
-              >
-                No
-              </Button>
-            </Stack>
+                <Button
+                  disabled
+                  variant="contained"
+                  color="primary"
+                  onClick={() => vote("yes")}
+                >
+                  Yes
+                </Button>
+                <Button
+                  disabled
+                  variant="contained"
+                  color="error"
+                  onClick={() => vote("no")}
+                >
+                  No
+                </Button>
+              </Stack>
             </Show>
           </>
         ) : (

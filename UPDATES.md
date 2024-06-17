@@ -1,3 +1,8 @@
+## 0.3.0
+
+- Fixed bug where users whose global username was the same as their slug were displayed as having the name null
+- Voting page now locks once a vote is cast (Votes will be editable in the future, dont worry)
+
 ## 0.2.9
 
 - Invites can now be added to the end of a register link (Example: `https://demo.samu.lol/#/register?invite=EXAMPLE`)
