@@ -15,6 +15,10 @@ import {
   ListItemButton,
   Typography,
   Skeleton,
+  Stack,
+  Select,
+  MenuItem,
+  Grid,
 } from "@suid/material";
 import AppBar from "../components/AppBar";
 import ClosableAlert from "../components/ClosableAlert";
@@ -26,8 +30,12 @@ const PollsPage = () => {
   const navigate = useNavigate();
   const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
+  const [page, setPage] = createSignal(1);
+  const [sortMethod, setSortMethod] = createSignal("newest");
+  const itemsPerPage = 5;
 
-  onMount(async () => {
+  const fetchPolls = async () => {
+    setLoading(true);
     try {
       const response = await api.getInviteEvents(
         localStorage.getItem("token"),
@@ -39,16 +47,84 @@ const PollsPage = () => {
             ? response.maybeJson.error
             : "Something went wrong!"
         );
-        return setAlertOpen(true);
+        setAlertOpen(true);
       } else {
-        setPolls(response.events);
+        let sortedPolls = [...response.events];
+        if (sortMethod() === "oldest") {
+          sortedPolls = sortedPolls.sort(
+            (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+          );
+        } else if (sortMethod() === "newest") {
+          sortedPolls = sortedPolls.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+        } else if (sortMethod() === "minusvotes") {
+          sortedPolls = sortedPolls.sort(
+            (a, b) =>
+              a.positiveVotesInt +
+              a.negativeVotesInt -
+              (b.positiveVotesInt + b.negativeVotesInt)
+          );
+        } else if (sortMethod() === "plusvotes") {
+          sortedPolls = sortedPolls.sort(
+            (a, b) =>
+              b.positiveVotesInt +
+              b.negativeVotesInt -
+              (a.positiveVotesInt + a.negativeVotesInt)
+          );
+        }
+        setPolls(sortedPolls);
       }
     } catch (error) {
-      alert("Failed to fetch polls!");
+      setError("Failed to fetch polls!");
+      setAlertOpen(true);
     } finally {
       setLoading(false);
     }
+  };
+
+  onMount(() => {
+    fetchPolls();
   });
+
+  const handleSortChange = (event) => {
+    setSortMethod(event.target.value);
+    fetchPolls();
+  };
+
+  const currentPolls = () => {
+    const start = (page() - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return polls().slice(start, end);
+  };
+
+  const calculateTimeRemaining = (endsAt) => {
+    const firstDate: Date = new Date(endsAt);
+
+    const secondDate: Date = new Date();
+
+    // Time Difference in Milliseconds
+    const milliDiff: number = firstDate.getTime() - secondDate.getTime();
+
+    // Converting time into hh:mm:ss format
+
+    // Total number of seconds in the difference
+    const totalSeconds = Math.floor(milliDiff / 1000);
+
+    // Total number of minutes in the difference
+    const totalMinutes = Math.floor(totalSeconds / 60);
+
+    // Total number of hours in the difference
+    const totalHours = Math.floor(totalMinutes / 60);
+
+    // Getting the number of seconds left in one minute
+    const remSeconds = totalSeconds % 60;
+
+    // Getting the number of minutes left in one hour
+    const remMinutes = totalMinutes % 60;
+
+    return `${totalHours}h ${remMinutes}m ${remSeconds}s`;
+  };
 
   return (
     <Container
@@ -57,6 +133,7 @@ const PollsPage = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        alignItems: "center",
         minHeight: "100vh",
       }}
     >
@@ -66,12 +143,11 @@ const PollsPage = () => {
           p: "20px",
           border: "1px solid box.box",
           borderRadius: "8px",
+          width: "40vw",
         }}
       >
         <AppBar />
-        <Typography variant="h6" p="10px">
-          Polls
-        </Typography>
+
         <ClosableAlert
           open={alertOpen()}
           severity="error"
@@ -79,10 +155,25 @@ const PollsPage = () => {
         >
           {error()}
         </ClosableAlert>
+        <Box sx={{ display: "flex" }}>
+          <Typography
+            variant="h6"
+            p="10px"
+            sx={{ flexGrow: 1, userSelect: "none", cursor: "pointer" }}
+          >
+            Polls
+          </Typography>
+          <Select value={sortMethod()} onChange={handleSortChange}>
+            <MenuItem value="newest">Newest</MenuItem>
+            <MenuItem value="oldest">Oldest</MenuItem>
+            <MenuItem value="plusvotes">Most votes</MenuItem>
+            <MenuItem value="minusvotes">Least votes</MenuItem>
+          </Select>
+        </Box>
         <List>
           {loading()
             ? // Skeleton Loaders
-              Array.from(new Array(5)).map(() => (
+              Array.from(new Array(itemsPerPage)).map((_, index) => (
                 <>
                   <ListItem>
                     <ListItemButton>
@@ -97,7 +188,7 @@ const PollsPage = () => {
                   <Divider variant="middle" component="li" />
                 </>
               ))
-            : polls().map((poll) => (
+            : currentPolls().map((poll) => (
                 <>
                   <ListItem>
                     <ListItemButton
@@ -109,26 +200,73 @@ const PollsPage = () => {
                           src={poll.discordPfpUrl}
                         />
                       </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          (poll.discordUser !== null
-                            ? poll.discordUser
-                            : poll.discordSlug) +
+                      <Typography
+                        sx={{
+                          flexGrow: 1,
+                          userSelect: "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {(poll.discordUser !== null
+                          ? poll.discordUser
+                          : poll.discordSlug) +
                           " | +" +
                           poll.positiveVotesInt +
                           " | -" +
-                          poll.negativeVotesInt
-                        }
-                      />
+                          poll.negativeVotesInt}
+                      </Typography>
+                      <Typography>
+                        {calculateTimeRemaining(poll.endsAt)}
+                      </Typography>
                     </ListItemButton>
                   </ListItem>
                   <Divider variant="middle" component="li" />
                 </>
               ))}
         </List>
-        <Button variant="outlined" href="/suggest">
-          Suggest new user
-        </Button>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mt: 2,
+          }}
+        >
+          <Grid
+            container
+            spacing={0}
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Grid item xs sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Button
+                variant="outlined"
+                disabled={page() === 1}
+                onClick={() => setPage(page() - 1)}
+              >
+                Previous
+              </Button>
+            </Grid>
+            <Grid item xs>
+              <Typography
+                variant="body1"
+                align="center"
+                sx={{ justifyContent: "center" }}
+              >
+                Page {page()} of {Math.ceil(polls().length / itemsPerPage)}
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              <Button
+                variant="outlined"
+                disabled={page() === Math.ceil(polls().length / itemsPerPage)}
+                onClick={() => setPage(page() + 1)}
+              >
+                Next
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
       </Box>
       <Footer sx={{ mt: 2, mb: 4 }} />
     </Container>

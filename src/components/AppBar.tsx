@@ -66,6 +66,11 @@ const AppBar = () => {
     handleClose();
   };
 
+  const handleSuggest = () => {
+    navigate("/suggest");
+    handleClose();
+  };
+
   const handleDemoInfraClick = () => {
     const randomIndex = Math.floor(Math.random() * demoInfraTexts.length);
     setDemoInfraIndex(randomIndex);
@@ -82,6 +87,9 @@ const AppBar = () => {
         >
           {demoInfraTexts[demoInfraIndex()]}
         </Typography>
+        <Button variant="text" onClick={handleSuggest}>
+          Suggest
+        </Button>
         <Button variant="text" onClick={handlePolls}>
           Polls
         </Button>

@@ -1,3 +1,9 @@
+## 0.3.3
+
+- Added pagination
+- Added sorting
+- Added time till end of a poll
+
 ## 0.3.2
 
 - Fixed bug where additional buttons are randomly added
