@@ -6,6 +6,7 @@ import type {
   APIIVotePosResponse,
   APIIVoteNegResponse,
   APIFetchError,
+  APIUsersVerifyResponse,
 } from "../lib/types";
 import "../css/form.css";
 import {
@@ -55,8 +56,19 @@ const VotePage = () => {
   const vote = async (option) => {
     try {
       const token = localStorage.getItem("token");
+
       if (!token) {
+        navigate("/");
       }
+
+      try {
+        const response = await api.verifyToken(localStorage.getItem("token"));
+        if ("error" in response) {
+          alert("Could not verify your token");
+          navigate("/");
+        } else {
+        }
+      } catch (error) {}
 
       let response:
         | APIIVotePosResponse

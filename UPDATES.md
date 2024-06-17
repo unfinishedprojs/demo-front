@@ -1,3 +1,7 @@
+## 0.3.5
+
+- Send user to dashboard if their token is invalid
+
 ## 0.3.4
 
 - Fix mobile (had to make desktop ultrawide tho)

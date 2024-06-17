@@ -83,7 +83,22 @@ const PollsPage = () => {
     }
   };
 
-  onMount(() => {
+  onMount(async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/");
+    }
+
+    try {
+      const response = await api.verifyToken(localStorage.getItem("token"));
+      if ("error" in response) {
+        alert("Could not verify your token");
+        navigate("/");
+      } else {
+      }
+    } catch (error) {}
+
     fetchPolls();
   });
 

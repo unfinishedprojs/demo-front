@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import TextField from "@suid/material/TextField";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
@@ -7,12 +7,14 @@ import AppBar from "../components/AppBar";
 import { Container, Box } from "@suid/material";
 import ClosableAlert from "../components/ClosableAlert";
 import Footer from "../components/Footer";
+import { useNavigate } from "@solidjs/router";
 
 const SuggestUserPage = () => {
   const [discordId, setDiscordId] = createSignal("");
 
   const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
+  const navigate = useNavigate();
 
   const suggestUser = async () => {
     try {
@@ -43,6 +45,23 @@ const SuggestUserPage = () => {
       alert("Suggestion failed!");
     }
   };
+
+  onMount(async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/");
+    }
+
+    try {
+      const response = await api.verifyToken(localStorage.getItem("token"));
+      if ("error" in response) {
+        alert("Could not verify your token");
+        navigate("/");
+      } else {
+      }
+    } catch (error) {}
+  });
 
   return (
     <Container
