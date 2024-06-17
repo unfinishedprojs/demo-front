@@ -68,7 +68,7 @@ const RegisterPage = () => {
         }
       } else {
         console.log(response);
-        navigate("/login");
+        navigate("/rules?invite" + inviteCode());
       }
     } catch (error) {
       alert("Registration failed!");

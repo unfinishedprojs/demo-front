@@ -1,3 +1,7 @@
+## 0.3.6
+
+- Fix bug where voting buttons would appear active even though the poll ended
+
 ## 0.3.5
 
 - Send user to dashboard if their token is invalid

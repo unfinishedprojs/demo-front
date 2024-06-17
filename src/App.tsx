@@ -7,6 +7,7 @@ import SuggestUserPage from "./pages/SuggestUserPage";
 import { ThemeProvider, createTheme, type Theme } from "@suid/material";
 import { theme as themeGeneral } from "./components/ThemeToggle";
 import EndedPage from "./pages/EndedPage";
+import RulesPage from "./pages/RulesPage";
 
 function App() {
   let theme: Theme<string>;
@@ -47,6 +48,7 @@ function App() {
         <Route path="/register" component={RegisterPage} />
         <Route path="/vote/:id" component={VotePage} />
         <Route path="/suggest" component={SuggestUserPage} />
+        <Route path="/rules" component={RulesPage} />
       </Router>
     </ThemeProvider>
   );

@@ -190,10 +190,10 @@ const VotePage = () => {
                 justifyContent="center"
                 sx={{ mt: 2 }}
               >
-                <Button variant="contained" color="primary">
+                <Button variant="contained" color="primary" disabled>
                   Yes
                 </Button>
-                <Button variant="contained" color="error">
+                <Button variant="contained" color="error" disabled>
                   No
                 </Button>
                 <Show when={localStorage.getItem("admin") === "true"}>
