@@ -39,7 +39,7 @@ const PollsPage = () => {
     try {
       const response = await api.getInviteEvents(
         localStorage.getItem("token"),
-        { active: "false" }
+        { ended: "false" }
       );
       if ("error" in response) {
         setError(
@@ -143,7 +143,7 @@ const PollsPage = () => {
           p: "20px",
           border: "1px solid box.box",
           borderRadius: "8px",
-          width: "40vw",
+          width: "90vw",
         }}
       >
         <AppBar />
@@ -206,6 +206,7 @@ const PollsPage = () => {
                           userSelect: "none",
                           cursor: "pointer",
                         }}
+                        p="10px"
                       >
                         {(poll.discordUser !== null
                           ? poll.discordUser

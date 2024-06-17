@@ -32,9 +32,13 @@ const RegisterPage = () => {
     try {
       const response = await api.verifyToken(localStorage.getItem("token"));
       if ("error" in response) {
-        console.log("Token in localStorage is invalid, ignoring...")
+        console.log("Token in localStorage is invalid, ignoring...");
       } else {
         alert("Account found, you have been logged in");
+        localStorage.setItem("discordUser", response.discordUser);
+        localStorage.setItem("discordSlug", response.discordSlug);
+        localStorage.setItem("discordPfpUrl", response.discordPfpUrl);
+        localStorage.setItem("admin", response.admin);
         navigate("/polls");
       }
     } catch (error) {}
@@ -78,6 +82,7 @@ const RegisterPage = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        alignItems: "center",
         minHeight: "100vh",
       }}
     >
@@ -91,41 +96,56 @@ const RegisterPage = () => {
       >
         <NoLoginAppBar />
         {loaded() ? (
-        <><h1 class="text-2xl">Register</h1><ClosableAlert
-            open={alertOpen()}
-            severity="error"
-            onClose={() => setAlertOpen(false)}
-          >
-            {error()}
-          </ClosableAlert><TextField
+          <>
+            <h1 class="text-2xl">Register</h1>
+            <ClosableAlert
+              open={alertOpen()}
+              severity="error"
+              onClose={() => setAlertOpen(false)}
+            >
+              {error()}
+            </ClosableAlert>
+            <TextField
               required
               label="Discord ID"
               variant="filled"
-              onInput={(e) => setDiscordId((e.target as HTMLInputElement).value)}
+              onInput={(e) =>
+                setDiscordId((e.target as HTMLInputElement).value)
+              }
               fullWidth
-              margin="normal" /><TextField
+              margin="normal"
+            />
+            <TextField
               required
               type="password"
               label="Password"
               variant="filled"
               onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
               fullWidth
-              margin="normal" /><TextField
+              margin="normal"
+            />
+            <TextField
               required
               defaultValue={inviteCode()}
               label="Invite Code"
               variant="filled"
-              onInput={(e: Event) => setInviteCode((e.target as HTMLInputElement).value)}
+              onInput={(e: Event) =>
+                setInviteCode((e.target as HTMLInputElement).value)
+              }
               fullWidth
-              margin="normal" /><Button variant="contained" color="primary" onClick={register}>
+              margin="normal"
+            />
+            <Button variant="contained" color="primary" onClick={register}>
               Register
-            </Button><p class="mt-4">
+            </Button>
+            <p class="mt-4">
               Already have an account?{" "}
               <Button color="secondary" onClick={() => navigate("/login")}>
                 Login here
               </Button>
-            </p></>
-        ): (
+            </p>
+          </>
+        ) : (
           <p>Loading...</p>
         )}
       </Box>

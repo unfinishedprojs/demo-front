@@ -131,5 +131,12 @@ export const api = {
       token
     )) as APISuggestUserResponse | APIFetchError;
   },
+  deleteEvent: async (eventId: string, token: string) => {
+    return (await awaitedPost(
+      "/api/v2/admin/deleteevent",
+      { eventId },
+      token
+    )) as APISuggestUserResponse | APIFetchError;
+  },
 };
 export default api;

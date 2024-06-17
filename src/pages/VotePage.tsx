@@ -24,9 +24,10 @@ import Footer from "../components/Footer";
 const VotePage = () => {
   const params = useParams();
   const [poll, setPoll] = createSignal(null);
-
+  const [delButCont, setDelButCont] = createSignal("Delete");
   const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
+  const [warned, setWarned] = createSignal(false);
   const navigate = useNavigate();
 
   onMount(async () => {
@@ -54,7 +55,8 @@ const VotePage = () => {
   const vote = async (option) => {
     try {
       const token = localStorage.getItem("token");
-      if (!token) throw new Error("No token found");
+      if (!token) {
+      }
 
       let response:
         | APIIVotePosResponse
@@ -81,6 +83,35 @@ const VotePage = () => {
     }
   };
 
+  const verifyDelete = async () => {
+    setDelButCont("Are you sure?");
+    if (warned() === false) return setWarned(true);
+    if (warned() === true) {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("No token found");
+
+        let response = await api.deleteEvent(params.id, token);
+
+        if ("error" in response) {
+          console.log(response);
+          setError(
+            response.maybeJson
+              ? response.maybeJson.error
+              : "Something went wrong!"
+          );
+          return setAlertOpen(true);
+        } else {
+          alert("Event deleted!");
+          navigate("/polls");
+        }
+      } catch (error) {
+        console.log(error);
+        alert("Vote failed!");
+      }
+    }
+  };
+
   return (
     <Container
       maxWidth="sm"
@@ -88,6 +119,7 @@ const VotePage = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        alignItems: "center",
         minHeight: "100vh",
       }}
     >
@@ -152,6 +184,15 @@ const VotePage = () => {
                 <Button variant="contained" color="error">
                   No
                 </Button>
+                <Show when={localStorage.getItem("admin") === "true"}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => verifyDelete()}
+                  >
+                    {delButCont()}
+                  </Button>
+                </Show>
               </Stack>
             </Show>
 
@@ -169,6 +210,15 @@ const VotePage = () => {
                 <Button disabled variant="contained" color="error">
                   No
                 </Button>
+                <Show when={localStorage.getItem("admin") === "true"}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => verifyDelete()}
+                  >
+                    {delButCont()}
+                  </Button>
+                </Show>
               </Stack>
             </Show>
             <Show when={poll().voted === false && poll().ended === false}>
@@ -192,6 +242,15 @@ const VotePage = () => {
                 >
                   No
                 </Button>
+                <Show when={localStorage.getItem("admin") === "true"}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => verifyDelete()}
+                  >
+                    {delButCont()}
+                  </Button>
+                </Show>
               </Stack>
             </Show>
           </>

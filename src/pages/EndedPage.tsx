@@ -39,7 +39,7 @@ const EndedPage = () => {
     try {
       const response = await api.getInviteEvents(
         localStorage.getItem("token"),
-        { active: "true" }
+        { ended: "true" }
       );
       if ("error" in response) {
         setError(
@@ -112,10 +112,10 @@ const EndedPage = () => {
       <Box
         sx={{
           bgcolor: "box.box",
+          width: "40vh",
           p: "20px",
           border: "1px solid box.box",
           borderRadius: "8px",
-          width: "40vw",
         }}
       >
         <AppBar />

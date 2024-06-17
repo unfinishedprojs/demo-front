@@ -24,6 +24,10 @@ const LoginPage = () => {
         console.log("Token in localStorage is invalid, ignoring...");
       } else {
         alert("Account found, you have been logged in");
+        localStorage.setItem("discordUser", response.discordUser);
+        localStorage.setItem("discordSlug", response.discordSlug);
+        localStorage.setItem("discordPfpUrl", response.discordPfpUrl);
+        localStorage.setItem("admin", response.admin);
         navigate("/polls");
       }
     } catch (error) {}
@@ -53,6 +57,7 @@ const LoginPage = () => {
         localStorage.setItem("discordUser", response.discordUser);
         localStorage.setItem("discordSlug", response.discordSlug);
         localStorage.setItem("discordPfpUrl", response.discordPfpUrl);
+        localStorage.setItem("admin", response.admin);
         navigate("/polls");
       }
     } catch (error) {
@@ -68,13 +73,14 @@ const LoginPage = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        alignItems: "center",
         minHeight: "100vh",
       }}
     >
       <Box
         sx={{
           bgcolor: "box.box",
-          width: "50vh",
+          width: "40vh",
           p: "20px",
           border: "1px solid box.box",
           borderRadius: "8px",

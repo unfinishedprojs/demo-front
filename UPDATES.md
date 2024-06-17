@@ -1,3 +1,8 @@
+## 0.3.4
+
+- Fix mobile (had to make desktop ultrawide tho)
+- Added admin buttons
+
 ## 0.3.3
 
 - Added pagination
