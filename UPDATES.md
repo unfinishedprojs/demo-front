@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Fixed bug where buttons to vote on users disappeared (?)
+
 ## 0.3.0
 
 - Fixed bug where users whose global username was the same as their slug were displayed as having the name null

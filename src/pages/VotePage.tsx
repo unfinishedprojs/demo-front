@@ -146,18 +146,10 @@ const VotePage = () => {
                 justifyContent="center"
                 sx={{ mt: 2 }}
               >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => vote("yes")}
-                >
+                <Button variant="contained" color="primary">
                   Yes
                 </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => vote("no")}
-                >
+                <Button variant="contained" color="error">
                   No
                 </Button>
               </Stack>
@@ -171,25 +163,15 @@ const VotePage = () => {
                 justifyContent="center"
                 sx={{ mt: 2 }}
               >
-                <Button
-                  disabled
-                  variant="contained"
-                  color="primary"
-                  onClick={() => vote("yes")}
-                >
+                <Button disabled variant="contained" color="primary">
                   Yes
                 </Button>
-                <Button
-                  disabled
-                  variant="contained"
-                  color="error"
-                  onClick={() => vote("no")}
-                >
+                <Button disabled variant="contained" color="error">
                   No
                 </Button>
               </Stack>
             </Show>
-            <Show when={poll().ended === true}>
+            <Show when={poll().ended === false}>
               <Stack
                 spacing={2}
                 direction="row"
@@ -197,7 +179,6 @@ const VotePage = () => {
                 sx={{ mt: 2 }}
               >
                 <Button
-                  disabled
                   variant="contained"
                   color="primary"
                   onClick={() => vote("yes")}
@@ -205,7 +186,6 @@ const VotePage = () => {
                   Yes
                 </Button>
                 <Button
-                  disabled
                   variant="contained"
                   color="error"
                   onClick={() => vote("no")}
