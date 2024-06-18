@@ -1,3 +1,7 @@
+## 0.3.9
+
+- Fix broken redirect to rules
+
 ## 0.3.8
 
 - Log users in on register

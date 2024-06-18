@@ -73,7 +73,7 @@ const RegisterPage = () => {
         localStorage.setItem("discordSlug", response.discordSlug);
         localStorage.setItem("discordPfpUrl", response.discordPfpUrl);
         localStorage.setItem("admin", response.admin);
-        navigate("/rules?invite" + inviteCode());
+        navigate("/rules?invite=" + inviteCode());
       }
     } catch (error) {
       alert("Registration failed!");
