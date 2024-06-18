@@ -68,6 +68,11 @@ const RegisterPage = () => {
         }
       } else {
         console.log(response);
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("discordUser", response.discordUser);
+        localStorage.setItem("discordSlug", response.discordSlug);
+        localStorage.setItem("discordPfpUrl", response.discordPfpUrl);
+        localStorage.setItem("admin", response.admin);
         navigate("/rules?invite" + inviteCode());
       }
     } catch (error) {

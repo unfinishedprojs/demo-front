@@ -5,7 +5,7 @@ const LogOutButton = () => {
   const navigate = useNavigate();
 
   const logOut = () => {
-    localStorage.setItem("token", null);
+    localStorage.removeItem("token");
     alert("You have been logged out!");
     navigate("/login");
   };

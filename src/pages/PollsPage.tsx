@@ -49,14 +49,22 @@ const PollsPage = () => {
         );
         setAlertOpen(true);
       } else {
-        let sortedPolls = [...response.events];
+        let sortedPolls = [...response.events] as unknown as {
+          voted: boolean;
+          createdAt: Date;
+          positiveVotesInt: number;
+          negativeVotesInt: number;
+        }[];
+
         if (sortMethod() === "oldest") {
           sortedPolls = sortedPolls.sort(
-            (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            (a, b) =>
+              (new Date(a.createdAt) as any) - (new Date(b.createdAt) as any)
           );
         } else if (sortMethod() === "newest") {
           sortedPolls = sortedPolls.sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            (a, b) =>
+              (new Date(b.createdAt) as any) - (new Date(a.createdAt) as any)
           );
         } else if (sortMethod() === "minusvotes") {
           sortedPolls = sortedPolls.sort(

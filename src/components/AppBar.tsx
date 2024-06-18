@@ -71,6 +71,11 @@ const AppBar = () => {
     handleClose();
   };
 
+  const handleRules = () => {
+    navigate("/rules");
+    handleClose();
+  };
+
   const handleDemoInfraClick = () => {
     const randomIndex = Math.floor(Math.random() * demoInfraTexts.length);
     setDemoInfraIndex(randomIndex);
@@ -117,6 +122,7 @@ const AppBar = () => {
           }}
         >
           {/* <MenuItem onClick={handleDashboard}>Dashboard</MenuItem> */}
+          <MenuItem onClick={handleRules}>Rules</MenuItem>
           <MenuItem onClick={handleLogout}>Log Out</MenuItem>
         </Menu>
       </Toolbar>

@@ -34,6 +34,7 @@ export interface APIUsersVerifyResponse {
 }
 
 export interface APIRegisterResponse {
+  admin: string;
   discordPfpUrl: string;
   discordSlug: string;
   discordUser: string;

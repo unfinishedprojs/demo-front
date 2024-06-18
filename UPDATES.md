@@ -1,3 +1,8 @@
+## 0.3.8
+
+- Log users in on register
+- Update rules
+
 ## 0.3.7
 
 - Add percentage to polls page

@@ -1,9 +1,10 @@
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount, Show } from "solid-js";
 import { useNavigate, useSearchParams } from "@solidjs/router";
 import "../css/form.css";
 import { Box, Button, Container, Typography } from "@suid/material";
 import Footer from "../components/Footer";
 import NoLoginAppBar from "../components/NoLoginAppBar";
+import AppBar from "../components/AppBar";
 
 const RulesPage = () => {
   const [inviteCode, setInviteCode] = createSignal("");
@@ -40,7 +41,12 @@ const RulesPage = () => {
           borderRadius: "8px",
         }}
       >
-        <NoLoginAppBar />
+        <Show when={localStorage.getItem("token") === "null"}>
+          <NoLoginAppBar />
+        </Show>
+        <Show when={localStorage.getItem("token") !== "null"}>
+          <AppBar />
+        </Show>
         <Typography variant="h4">Welcome!</Typography>
         <Typography>
           Here are some rules you should probably follow when using this
@@ -50,19 +56,26 @@ const RulesPage = () => {
         <Typography>
           2. Use common sense, both when voting and when talking in the group
         </Typography>
-        <Typography>3. Be cute</Typography>
-        <Typography paddingTop="10px" paddingBottom="10px">
-          Once you are ready, press the Join Server button, and then read #info
+        <Typography>
+          3. If you abuse the system in a disruptive way, you will get a 24h ban
+          from the service for first offense,
         </Typography>
+        <Typography>4. Be cute</Typography>
 
-        <Button
-          color="primary"
-          variant="contained"
-          href={`https://discord.gg/${inviteCode()}`}
-          //   onClick={navigate(`https://discord.gg/${inviteCode}`)}
-        >
-          Join server
-        </Button>
+        <Show when={searchParams.invite}>
+          <Typography paddingTop="10px" paddingBottom="10px">
+            Once you are ready, press the Join Server button, and then read
+            #info
+          </Typography>
+
+          <Button
+            color="primary"
+            variant="contained"
+            href={`https://discord.gg/${inviteCode()}`}
+          >
+            Join server
+          </Button>
+        </Show>
       </Box>
       <Footer sx={{ mt: 2, mb: 4 }} />
     </Container>
