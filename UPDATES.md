@@ -1,3 +1,13 @@
+## 0.4.0
+
+This update was made by @hen
+
+- Extracted some code to remove duplication/improve readability
+- Changed the way how footer/navbar were rendered, it was horror
+- Some small changes for Box sizes for mobile
+- No reload on changing theme
+- Adding/changing themes now a little easier
+
 ## 0.3.9
 
 - Fix broken redirect to rules
