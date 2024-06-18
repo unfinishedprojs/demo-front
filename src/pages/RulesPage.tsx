@@ -25,7 +25,6 @@ const RulesPage = () => {
       <Box
         sx={{
           bgcolor: "box.box",
-          minWidth: "35rem",
           p: "20px",
           border: "1px solid box.box",
           borderRadius: "8px",

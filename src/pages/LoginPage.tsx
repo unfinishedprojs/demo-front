@@ -7,6 +7,7 @@ import ClosableAlert from "../components/ClosableAlert";
 import { Box, Container, CssBaseline, useMediaQuery } from "@suid/material";
 import NoLoginAppBar from "../components/NoLoginAppBar";
 import { MOBILE_MEDIA_QUERY } from "../utils/mobileMediaQuery";
+import { Center } from "../components/Center";
 
 const LoginPage = () => {
   const [discordId, setDiscordId] = createSignal("");
@@ -68,54 +69,56 @@ const LoginPage = () => {
   };
 
   return (
-    <Box
-      sx={{
-        bgcolor: "box.box",
-        width: isMobile() ? "100%" : "40vw",
-        p: "20px",
-        border: "1px solid box.box",
-        borderRadius: "8px",
-      }}
-    >
-      <NoLoginAppBar />
-      <br />
-      <h1 class="text-2xl">Login</h1>
-      <ClosableAlert
-        open={alertOpen()}
-        severity="error"
-        onClose={() => setAlertOpen(false)}
+    <Center>
+      <Box
+        sx={{
+          bgcolor: "box.box",
+          width: isMobile() ? "100%" : "40vw",
+          p: "20px",
+          border: "1px solid box.box",
+          borderRadius: "8px",
+        }}
       >
-        {error()}
-      </ClosableAlert>
-      <TextField
-        required
-        label="Discord ID"
-        variant="filled"
-        onInput={(e) => setDiscordId((e.target as HTMLInputElement).value)}
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        required
-        type="password"
-        label="Password"
-        variant="filled"
-        onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
-        fullWidth
-        margin="normal"
-      />
-      <Button variant="contained" color="primary" onClick={login}>
-        Login
-      </Button>
-      <p class="mt-4">Don't have an account just yet?</p>
-      <Button
-        sx={{ padding: 0 }}
-        color="secondary"
-        onClick={() => navigate("/register")}
-      >
-        Register here
-      </Button>
-    </Box>
+        <NoLoginAppBar />
+        <br />
+        <h1 class="text-2xl">Login</h1>
+        <ClosableAlert
+          open={alertOpen()}
+          severity="error"
+          onClose={() => setAlertOpen(false)}
+        >
+          {error()}
+        </ClosableAlert>
+        <TextField
+          required
+          label="Discord ID"
+          variant="filled"
+          onInput={(e) => setDiscordId((e.target as HTMLInputElement).value)}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          required
+          type="password"
+          label="Password"
+          variant="filled"
+          onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
+          fullWidth
+          margin="normal"
+        />
+        <Button variant="contained" color="primary" onClick={login}>
+          Login
+        </Button>
+        <p class="mt-4">Don't have an account just yet?</p>
+        <Button
+          sx={{ padding: 0 }}
+          color="secondary"
+          onClick={() => navigate("/register")}
+        >
+          Register here
+        </Button>
+      </Box>
+    </Center>
   );
 };
 
