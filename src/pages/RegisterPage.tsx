@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from "@solidjs/router";
 import TextField from "@suid/material/TextField";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
-import "../css/form.css";
 import ClosableAlert from "../components/ClosableAlert";
 import NoLoginAppBar from "../components/NoLoginAppBar";
 import { Container, Box } from "@suid/material";

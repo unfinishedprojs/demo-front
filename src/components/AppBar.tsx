@@ -8,6 +8,7 @@ import {
   Menu,
   MenuItem,
   Button,
+  Box,
 } from "@suid/material";
 import ThemeToggle from "./ThemeToggle"; // Ensure this path is correct
 import { useNavigate } from "@solidjs/router";
@@ -82,7 +83,7 @@ const AppBar = () => {
   };
 
   return (
-    <AppBarSuid>
+    <AppBarSuid sx={{ position: "sticky", marginBottom: "1rem" }}>
       <Toolbar>
         <Typography
           variant="h6"
@@ -92,13 +93,13 @@ const AppBar = () => {
         >
           {demoInfraTexts[demoInfraIndex()]}
         </Typography>
-        <Button variant="text" onClick={handleSuggest}>
-          Suggest
+        <Button variant="text" class="!text-text" onClick={handleSuggest}>
+          SuggesT
         </Button>
-        <Button variant="text" onClick={handlePolls}>
+        <Button variant="text" class="!text-text" onClick={handlePolls}>
           Polls
         </Button>
-        <Button variant="text" onClick={handleEnded}>
+        <Button variant="text" class="!text-text" onClick={handleEnded}>
           Ended
         </Button>
         <ThemeToggle />

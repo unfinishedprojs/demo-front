@@ -1,16 +1,15 @@
 import { createSignal, onMount, Show } from "solid-js";
 import { useNavigate, useSearchParams } from "@solidjs/router";
-import "../css/form.css";
 import { Box, Button, Container, Typography } from "@suid/material";
 import Footer from "../components/Footer";
 import NoLoginAppBar from "../components/NoLoginAppBar";
 import AppBar from "../components/AppBar";
+import { Center } from "../components/Center";
 
 const RulesPage = () => {
   const [inviteCode, setInviteCode] = createSignal("");
   const [searchParams, setSearchParams] = useSearchParams();
   const [loaded, setLoaded] = createSignal(false);
-  const navigate = useNavigate();
 
   onMount(async () => {
     const value = searchParams.invite;
@@ -22,20 +21,11 @@ const RulesPage = () => {
   });
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-      }}
-    >
+    <Center>
       <Box
         sx={{
           bgcolor: "box.box",
-          width: "40vh",
+          minWidth: "35rem",
           p: "20px",
           border: "1px solid box.box",
           borderRadius: "8px",
@@ -43,9 +33,6 @@ const RulesPage = () => {
       >
         <Show when={localStorage.getItem("token") === "null"}>
           <NoLoginAppBar />
-        </Show>
-        <Show when={localStorage.getItem("token") !== "null"}>
-          <AppBar />
         </Show>
         <Typography variant="h4">Welcome!</Typography>
         <Typography>
@@ -77,8 +64,7 @@ const RulesPage = () => {
           </Button>
         </Show>
       </Box>
-      <Footer sx={{ mt: 2, mb: 4 }} />
-    </Container>
+    </Center>
   );
 };
 

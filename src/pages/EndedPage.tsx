@@ -4,25 +4,46 @@ import List from "@suid/material/List";
 import ListItem from "@suid/material/ListItem";
 import ListItemText from "@suid/material/ListItemText";
 import api from "../lib/api";
-import "../css/form.css";
 import {
   Avatar,
   Box,
   Button,
-  Container,
   Divider,
   ListItemAvatar,
   ListItemButton,
   Typography,
-  Skeleton,
-  Stack,
   Select,
   MenuItem,
   Grid,
+  useMediaQuery,
 } from "@suid/material";
-import AppBar from "../components/AppBar";
 import ClosableAlert from "../components/ClosableAlert";
-import Footer from "../components/Footer";
+import { SortBy, sortPolls } from "../utils/sortPolls";
+import { UserListItemLoadingSkeleton } from "../components/UserListItemSkeleton";
+import type { APIGetIEventResponse } from "../lib/types";
+import { MOBILE_MEDIA_QUERY } from "../utils/mobileMediaQuery";
+
+const UserListItem = ({ poll }: { poll: APIGetIEventResponse }) => {
+  const navigate = useNavigate();
+
+  const userSlugText =
+    (poll.discordUser ? poll.discordUser : poll.discordSlug) +
+    `| +${poll.positiveVotesInt} | -${poll.negativeVotesInt}`;
+
+  return (
+    <>
+      <ListItem>
+        <ListItemButton onClick={() => navigate(`/vote/${poll.eventId}`)}>
+          <ListItemAvatar>
+            <Avatar alt={poll.discordSlug} src={poll.discordPfpUrl} />
+          </ListItemAvatar>
+          <ListItemText primary={userSlugText} />
+        </ListItemButton>
+      </ListItem>
+      <Divider variant="middle" component="li" />
+    </>
+  );
+};
 
 const EndedPage = () => {
   const [polls, setPolls] = createSignal([]);
@@ -31,7 +52,8 @@ const EndedPage = () => {
   const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
   const [page, setPage] = createSignal(1);
-  const [sortMethod, setSortMethod] = createSignal("newest");
+  const [sortMethod, setSortMethod] = createSignal<SortBy>(SortBy.Newest);
+  const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY);
   const itemsPerPage = 5;
 
   const fetchPolls = async () => {
@@ -49,30 +71,7 @@ const EndedPage = () => {
         );
         setAlertOpen(true);
       } else {
-        let sortedPolls = [...response.events];
-        if (sortMethod() === "oldest") {
-          sortedPolls = sortedPolls.sort(
-            (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-          );
-        } else if (sortMethod() === "newest") {
-          sortedPolls = sortedPolls.sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-          );
-        } else if (sortMethod() === "minusvotes") {
-          sortedPolls = sortedPolls.sort(
-            (a, b) =>
-              a.positiveVotesInt +
-              a.negativeVotesInt -
-              (b.positiveVotesInt + b.negativeVotesInt)
-          );
-        } else if (sortMethod() === "plusvotes") {
-          sortedPolls = sortedPolls.sort(
-            (a, b) =>
-              b.positiveVotesInt +
-              b.negativeVotesInt -
-              (a.positiveVotesInt + a.negativeVotesInt)
-          );
-        }
+        const sortedPolls = sortPolls(response.events, sortMethod());
         setPolls(sortedPolls);
       }
     } catch (error) {
@@ -114,142 +113,88 @@ const EndedPage = () => {
   };
 
   return (
-    <Container
-      maxWidth="sm"
+    <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
+        bgcolor: "box.box",
+        width: isMobile() ? "90%" : "60vw",
+        p: "20px",
+        border: "1px solid box.box",
+        borderRadius: "8px",
       }}
     >
+      <ClosableAlert
+        open={alertOpen()}
+        severity="error"
+        onClose={() => setAlertOpen(false)}
+      >
+        {error()}
+      </ClosableAlert>
+      <Box sx={{ display: "flex" }}>
+        <Typography
+          variant="h6"
+          p="10px"
+          sx={{ flexGrow: 1, userSelect: "none", cursor: "pointer" }}
+        >
+          Polls that ended
+        </Typography>
+        <Select value={sortMethod()} onChange={handleSortChange}>
+          <MenuItem value={SortBy.Newest}>Newest</MenuItem>
+          <MenuItem value={SortBy.Oldest}>Oldest</MenuItem>
+          <MenuItem value={SortBy.PlusVotes}>Most votes</MenuItem>
+          <MenuItem value={SortBy.MinusVotes}>Least votes</MenuItem>
+        </Select>
+      </Box>
+      <List>
+        {loading() ? (
+          <UserListItemLoadingSkeleton itemAmount={itemsPerPage} />
+        ) : (
+          currentPolls().map((poll) => <UserListItem poll={poll} />)
+        )}
+      </List>
       <Box
         sx={{
-          bgcolor: "box.box",
-          width: "40vh",
-          p: "20px",
-          border: "1px solid box.box",
-          borderRadius: "8px",
+          display: "flex",
+          justifyContent: "center",
+          mt: 2,
         }}
       >
-        <AppBar />
-
-        <ClosableAlert
-          open={alertOpen()}
-          severity="error"
-          onClose={() => setAlertOpen(false)}
+        <Grid
+          container
+          spacing={0}
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
         >
-          {error()}
-        </ClosableAlert>
-        <Box sx={{ display: "flex" }}>
-          <Typography
-            variant="h6"
-            p="10px"
-            sx={{ flexGrow: 1, userSelect: "none", cursor: "pointer" }}
-          >
-            Polls that ended
-          </Typography>
-          <Select value={sortMethod()} onChange={handleSortChange}>
-            <MenuItem value="newest">Newest</MenuItem>
-            <MenuItem value="oldest">Oldest</MenuItem>
-            <MenuItem value="plusvotes">Most votes</MenuItem>
-            <MenuItem value="minusvotes">Least votes</MenuItem>
-          </Select>
-        </Box>
-        <List>
-          {loading()
-            ? // Skeleton Loaders
-              Array.from(new Array(itemsPerPage)).map((_, index) => (
-                <>
-                  <ListItem>
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        <Skeleton variant="circular" width={40} height={40} />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={<Skeleton variant="text" width="80%" />}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                  <Divider variant="middle" component="li" />
-                </>
-              ))
-            : currentPolls().map((poll) => (
-                <>
-                  <ListItem>
-                    <ListItemButton
-                      onClick={() => navigate(`/vote/${poll.eventId}`)}
-                    >
-                      <ListItemAvatar>
-                        <Avatar
-                          alt={poll.discordSlug}
-                          src={poll.discordPfpUrl}
-                        />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          (poll.discordUser !== null
-                            ? poll.discordUser
-                            : poll.discordSlug) +
-                          " | +" +
-                          poll.positiveVotesInt +
-                          " | -" +
-                          poll.negativeVotesInt
-                        }
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                  <Divider variant="middle" component="li" />
-                </>
-              ))}
-        </List>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            mt: 2,
-          }}
-        >
-          <Grid
-            container
-            spacing={0}
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Grid item xs sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button
-                variant="outlined"
-                disabled={page() === 1}
-                onClick={() => setPage(page() - 1)}
-              >
-                Previous
-              </Button>
-            </Grid>
-            <Grid item xs>
-              <Typography
-                variant="body1"
-                align="center"
-                sx={{ justifyContent: "center" }}
-              >
-                Page {page()} of {Math.ceil(polls().length / itemsPerPage)}
-              </Typography>
-            </Grid>
-            <Grid item xs>
-              <Button
-                variant="outlined"
-                disabled={page() === Math.ceil(polls().length / itemsPerPage)}
-                onClick={() => setPage(page() + 1)}
-              >
-                Next
-              </Button>
-            </Grid>
+          <Grid item xs sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              variant="outlined"
+              disabled={page() === 1}
+              onClick={() => setPage(page() - 1)}
+            >
+              Previous
+            </Button>
           </Grid>
-        </Box>
+          <Grid item xs>
+            <Typography
+              variant="body1"
+              align="center"
+              sx={{ justifyContent: "center" }}
+            >
+              Page {page()} of {Math.ceil(polls().length / itemsPerPage)}
+            </Typography>
+          </Grid>
+          <Grid item xs>
+            <Button
+              variant="outlined"
+              disabled={page() === Math.ceil(polls().length / itemsPerPage)}
+              onClick={() => setPage(page() + 1)}
+            >
+              Next
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
-      <Footer sx={{ mt: 2, mb: 4 }} />
-    </Container>
+    </Box>
   );
 };
 

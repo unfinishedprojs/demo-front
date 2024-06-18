@@ -13,10 +13,10 @@ const NoLoginAppBar = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Demo-Infra
         </Typography>
-        <Button variant="text" href="/login">
+        <Button variant="text" class="!text-text" href="/login">
           Login
         </Button>
-        <Button variant="text" href="/register">
+        <Button variant="text" class="!text-text" href="/register">
           Register
         </Button>
         <ThemeToggle />

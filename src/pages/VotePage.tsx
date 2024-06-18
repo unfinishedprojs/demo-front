@@ -8,7 +8,6 @@ import type {
   APIFetchError,
   APIUsersVerifyResponse,
 } from "../lib/types";
-import "../css/form.css";
 import {
   Alert,
   Avatar,
@@ -21,6 +20,7 @@ import {
 import AppBar from "../components/AppBar";
 import ClosableAlert from "../components/ClosableAlert";
 import Footer from "../components/Footer";
+import { Center } from "../components/Center";
 
 const VotePage = () => {
   const params = useParams();
@@ -125,25 +125,16 @@ const VotePage = () => {
   };
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-      }}
-    >
+    <Center>
       <Box
         sx={{
           bgcolor: "box.box",
           p: "20px",
+          minWidth: "35rem",
           border: "1px solid box.box",
           borderRadius: "8px",
         }}
       >
-        <AppBar />
         {poll() ? (
           <>
             <Avatar
@@ -270,8 +261,7 @@ const VotePage = () => {
           <CircularProgress />
         )}
       </Box>
-      <Footer sx={{ mt: 2, mb: 4 }} />
-    </Container>
+    </Center>
   );
 };
 

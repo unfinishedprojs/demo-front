@@ -20,14 +20,16 @@ const Footer = (props: any) => {
   });
 
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      Demo-Front: {version} | Demo-Server: {apiVersion()}
-    </Typography>
+    <footer class="w-screen box-border mb-8">
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        align="center"
+        {...props}
+      >
+        Demo-Front: {version} | Demo-Server: {apiVersion()}
+      </Typography>
+    </footer>
   );
 };
 

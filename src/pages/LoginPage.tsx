@@ -4,9 +4,9 @@ import TextField from "@suid/material/TextField";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
 import ClosableAlert from "../components/ClosableAlert";
-import { Box, Container, CssBaseline } from "@suid/material";
+import { Box, Container, CssBaseline, useMediaQuery } from "@suid/material";
 import NoLoginAppBar from "../components/NoLoginAppBar";
-import Footer from "../components/Footer";
+import { MOBILE_MEDIA_QUERY } from "../utils/mobileMediaQuery";
 
 const LoginPage = () => {
   const [discordId, setDiscordId] = createSignal("");
@@ -14,6 +14,7 @@ const LoginPage = () => {
   const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
   const navigate = useNavigate();
+  const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY);
 
   onMount(async () => {
     if (!localStorage.getItem("token")) return;
@@ -67,64 +68,54 @@ const LoginPage = () => {
   };
 
   return (
-    <Container
-      maxWidth="sm"
+    <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
+        bgcolor: "box.box",
+        width: isMobile() ? "100%" : "40vw",
+        p: "20px",
+        border: "1px solid box.box",
+        borderRadius: "8px",
       }}
     >
-      <Box
-        sx={{
-          bgcolor: "box.box",
-          width: "40vh",
-          p: "20px",
-          border: "1px solid box.box",
-          borderRadius: "8px",
-        }}
+      <NoLoginAppBar />
+      <br />
+      <h1 class="text-2xl">Login</h1>
+      <ClosableAlert
+        open={alertOpen()}
+        severity="error"
+        onClose={() => setAlertOpen(false)}
       >
-        <NoLoginAppBar />
-        <br />
-        <h1 class="text-2xl">Login</h1>
-        <ClosableAlert
-          open={alertOpen()}
-          severity="error"
-          onClose={() => setAlertOpen(false)}
-        >
-          {error()}
-        </ClosableAlert>
-        <TextField
-          required
-          label="Discord ID"
-          variant="filled"
-          onInput={(e) => setDiscordId((e.target as HTMLInputElement).value)}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          required
-          type="password"
-          label="Password"
-          variant="filled"
-          onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
-          fullWidth
-          margin="normal"
-        />
-        <Button variant="contained" color="primary" onClick={login}>
-          Login
-        </Button>
-        <p class="mt-4">
-          Don't have an account just yet?{" "}
-          <Button color="secondary" onClick={() => navigate("/register")}>
-            Register here
-          </Button>
-        </p>
-      </Box>
-      <Footer sx={{ mt: 2, mb: 4 }} />
-    </Container>
+        {error()}
+      </ClosableAlert>
+      <TextField
+        required
+        label="Discord ID"
+        variant="filled"
+        onInput={(e) => setDiscordId((e.target as HTMLInputElement).value)}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        required
+        type="password"
+        label="Password"
+        variant="filled"
+        onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
+        fullWidth
+        margin="normal"
+      />
+      <Button variant="contained" color="primary" onClick={login}>
+        Login
+      </Button>
+      <p class="mt-4">Don't have an account just yet?</p>
+      <Button
+        sx={{ padding: 0 }}
+        color="secondary"
+        onClick={() => navigate("/register")}
+      >
+        Register here
+      </Button>
+    </Box>
   );
 };
 
