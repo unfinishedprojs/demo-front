@@ -1,5 +1,8 @@
-import { render } from 'solid-js/web';
-import App from './App';
-import './index.css';
+import { render } from "solid-js/web";
+import App from "./App";
+import "./index.css";
 
-render(() => <App />, document.getElementById('root') as HTMLElement);
+const theme = localStorage.getItem("theme") || "dark";
+document.documentElement.setAttribute("data-theme", theme);
+
+render(() => <App />, document.getElementById("root") as HTMLElement);

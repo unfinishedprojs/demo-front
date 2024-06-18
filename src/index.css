@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --body-background-color: #ffffff;
+  --box-background-color: #f0f0f0;
+  --border-color: #ccc;
+  --text: #000;
+}
+
+html[data-theme="dark"] {
+  --body-background-color: #222222;
+  --box-background-color: #333;
+  --border-color: #444;
+  --text: #fff;
+}
+
+body,
+html {
+  background-color: var(--body-background-color);
+  color: var(--text);
+
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}

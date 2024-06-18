@@ -2,12 +2,12 @@ import { createSignal, onMount } from "solid-js";
 import TextField from "@suid/material/TextField";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
-import "../css/form.css";
 import AppBar from "../components/AppBar";
 import { Container, Box } from "@suid/material";
 import ClosableAlert from "../components/ClosableAlert";
 import Footer from "../components/Footer";
 import { useNavigate } from "@solidjs/router";
+import { Center } from "../components/Center";
 
 const SuggestUserPage = () => {
   const [discordId, setDiscordId] = createSignal("");
@@ -64,16 +64,7 @@ const SuggestUserPage = () => {
   });
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-      }}
-    >
+    <Center>
       <Box
         sx={{
           bgcolor: "box.box",
@@ -82,7 +73,6 @@ const SuggestUserPage = () => {
           borderRadius: "8px",
         }}
       >
-        <AppBar />
         <h1 class="text-2xl">Suggest a User</h1>
         <ClosableAlert
           open={alertOpen()}
@@ -102,8 +92,7 @@ const SuggestUserPage = () => {
           Suggest User
         </Button>
       </Box>
-      <Footer sx={{ mt: 2, mb: 4 }} />
-    </Container>
+    </Center>
   );
 };
 

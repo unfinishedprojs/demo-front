@@ -4,9 +4,10 @@ import TextField from "@suid/material/TextField";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
 import ClosableAlert from "../components/ClosableAlert";
-import { Box, Container, CssBaseline } from "@suid/material";
+import { Box, Container, CssBaseline, useMediaQuery } from "@suid/material";
 import NoLoginAppBar from "../components/NoLoginAppBar";
-import Footer from "../components/Footer";
+import { MOBILE_MEDIA_QUERY } from "../utils/mobileMediaQuery";
+import { Center } from "../components/Center";
 
 const LoginPage = () => {
   const [discordId, setDiscordId] = createSignal("");
@@ -14,6 +15,7 @@ const LoginPage = () => {
   const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
   const navigate = useNavigate();
+  const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY);
 
   onMount(async () => {
     if (!localStorage.getItem("token")) return;
@@ -67,20 +69,11 @@ const LoginPage = () => {
   };
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-      }}
-    >
+    <Center>
       <Box
         sx={{
           bgcolor: "box.box",
-          width: "40vh",
+          width: isMobile() ? "100%" : "40vw",
           p: "20px",
           border: "1px solid box.box",
           borderRadius: "8px",
@@ -116,15 +109,16 @@ const LoginPage = () => {
         <Button variant="contained" color="primary" onClick={login}>
           Login
         </Button>
-        <p class="mt-4">
-          Don't have an account just yet?{" "}
-          <Button color="secondary" onClick={() => navigate("/register")}>
-            Register here
-          </Button>
-        </p>
+        <p class="mt-4">Don't have an account just yet?</p>
+        <Button
+          sx={{ padding: 0 }}
+          color="secondary"
+          onClick={() => navigate("/register")}
+        >
+          Register here
+        </Button>
       </Box>
-      <Footer sx={{ mt: 2, mb: 4 }} />
-    </Container>
+    </Center>
   );
 };
 
