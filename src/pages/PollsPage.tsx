@@ -232,7 +232,13 @@ const PollsPage = () => {
                           poll.negativeVotesInt}
                       </Typography>
                       <Typography>
-                        {calculateTimeRemaining(poll.endsAt)}
+                        {(
+                          (poll.positiveVotesInt /
+                            (poll.positiveVotesInt + poll.negativeVotesInt)) *
+                          100
+                        ).toFixed(0) +
+                          "% | " +
+                          calculateTimeRemaining(poll.endsAt)}
                       </Typography>
                     </ListItemButton>
                   </ListItem>

@@ -1,3 +1,7 @@
+## 0.3.7
+
+- Add percentage to polls page
+
 ## 0.3.6
 
 - Fix bug where voting buttons would appear active even though the poll ended
