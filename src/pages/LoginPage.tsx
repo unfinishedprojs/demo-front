@@ -73,12 +73,10 @@ const LoginPage = () => {
   return (
     <Center>
       <Box
+        class="w-[90%] rounded-md p-4 md:w-[40vw]"
         sx={{
           bgcolor: "box.box",
-          width: isMobile() ? "100%" : "40vw",
-          p: "20px",
           border: "1px solid box.box",
-          borderRadius: "8px",
         }}
       >
         <NoLoginAppBar />

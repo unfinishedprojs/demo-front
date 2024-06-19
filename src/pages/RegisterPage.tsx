@@ -83,11 +83,10 @@ const RegisterPage = () => {
   return (
     <Center>
       <Box
+        class="w-[90%] rounded-md p-4 md:w-auto"
         sx={{
           bgcolor: "box.box",
-          p: "20px",
           border: "1px solid box.box",
-          borderRadius: "8px",
         }}
       >
         <NoLoginAppBar />
