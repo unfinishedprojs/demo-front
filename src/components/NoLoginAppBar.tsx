@@ -8,7 +8,7 @@ import ThemeToggle from "./ThemeToggle";
 
 const NoLoginAppBar = () => {
   return (
-    <AppBarSuid>
+    <AppBarSuid sx={{ bgcolor: "box.box" }}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Demo-Infra

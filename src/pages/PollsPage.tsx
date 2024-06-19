@@ -1,4 +1,10 @@
-import { createEffect, createMemo, createSignal } from "solid-js";
+import {
+  Show,
+  createEffect,
+  createMemo,
+  createResource,
+  createSignal,
+} from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import List from "@suid/material/List";
 import ListItem from "@suid/material/ListItem";
@@ -19,7 +25,7 @@ import { calculateTimeRemaining } from "../utils/calculateRemainingTime";
 import type { APIGetIEventResponse } from "../lib/types";
 import { sortPolls, SortBy } from "../utils/sortPolls";
 import { UserListItemsLoadingSkeleton } from "../components/UserListItemSkeleton";
-import { useAPI } from "../hooks/useAPI";
+import { fetchApi } from "../utils/fetchApi";
 
 const UserListItem = ({ poll }: { poll: APIGetIEventResponse }) => {
   const navigate = useNavigate();
@@ -64,11 +70,10 @@ const PollsPage = () => {
   const [page, setPage] = createSignal(1);
   const [sortMethod, setSortMethod] = createSignal<SortBy>(SortBy.Newest);
   const itemsPerPage = 5;
-  const {
-    loading,
-    error,
-    response: rawPolls,
-  } = useAPI("getInviteEvents", { ended: "false" });
+  const [rawPolls] = createResource(() =>
+    fetchApi("getInviteEvents", { ended: "false" }),
+  );
+  const { loading, error } = rawPolls;
 
   const [showAlert, setAlert] = createSignal(false);
   createEffect(() => setAlert(!!error()));
@@ -116,11 +121,14 @@ const PollsPage = () => {
         </Select>
       </Box>
       <List>
-        {loading() ? (
-          <UserListItemsLoadingSkeleton itemAmount={itemsPerPage} />
-        ) : (
-          currentPolls().map((poll) => <UserListItem poll={poll} />)
-        )}
+        <Show
+          when={!loading}
+          fallback={<UserListItemsLoadingSkeleton itemAmount={itemsPerPage} />}
+        >
+          {currentPolls().map((poll) => (
+            <UserListItem poll={poll} />
+          ))}
+        </Show>
       </List>
       <Box class="mt-2 flex justify-center">
         <Grid

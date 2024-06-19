@@ -1,4 +1,11 @@
-import { createEffect, createSignal, onMount } from "solid-js";
+import {
+  Show,
+  createEffect,
+  createMemo,
+  createResource,
+  createSignal,
+  onMount,
+} from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import List from "@suid/material/List";
 import ListItem from "@suid/material/ListItem";
@@ -21,7 +28,7 @@ import ClosableAlert from "../components/ClosableAlert";
 import { SortBy, sortPolls } from "../utils/sortPolls";
 import { UserListItemsLoadingSkeleton } from "../components/UserListItemSkeleton";
 import type { APIGetIEventResponse } from "../lib/types";
-import { useAPI } from "../hooks/useAPI";
+import { fetchApi } from "../utils/fetchApi";
 
 const UserListItem = ({ poll }: { poll: APIGetIEventResponse }) => {
   const navigate = useNavigate();
@@ -50,16 +57,13 @@ const EndedPage = () => {
   const [page, setPage] = createSignal(1);
   const [sortMethod, setSortMethod] = createSignal<SortBy>(SortBy.Newest);
   const itemsPerPage = 5;
-  const {
-    loading,
-    error,
-    response: rawPolls,
-  } = useAPI("getInviteEvents", { ended: "true" });
-  createEffect(() => {
-    setAlertOpen(!!error());
-  });
+  const [rawPolls] = createResource(() =>
+    fetchApi("getInviteEvents", { ended: "true" }),
+  );
 
-  const polls = sortPolls(rawPolls()?.events || [], sortMethod());
+  const polls = createMemo(() =>
+    sortPolls(rawPolls()?.events || [], sortMethod()),
+  );
 
   const handleSortChange = (event) => {
     setSortMethod(event.target.value);
@@ -68,7 +72,7 @@ const EndedPage = () => {
   const currentPolls = () => {
     const start = (page() - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return polls.slice(start, end);
+    return polls().slice(start, end);
   };
 
   return (
@@ -80,11 +84,11 @@ const EndedPage = () => {
       }}
     >
       <ClosableAlert
-        open={alertOpen()}
+        open={rawPolls.error && !alertOpen()}
         severity="error"
         onClose={() => setAlertOpen(false)}
       >
-        {error()}
+        {rawPolls}
       </ClosableAlert>
       <Box class="flex">
         <Typography
@@ -102,11 +106,14 @@ const EndedPage = () => {
         </Select>
       </Box>
       <List>
-        {loading() ? (
-          <UserListItemsLoadingSkeleton itemAmount={itemsPerPage} />
-        ) : (
-          currentPolls().map((poll) => <UserListItem poll={poll} />)
-        )}
+        <Show
+          when={!rawPolls.loading}
+          fallback={<UserListItemsLoadingSkeleton itemAmount={itemsPerPage} />}
+        >
+          {currentPolls().map((poll) => (
+            <UserListItem poll={poll} />
+          ))}
+        </Show>
       </List>
       <Box
         sx={{
@@ -137,13 +144,13 @@ const EndedPage = () => {
               align="center"
               sx={{ justifyContent: "center" }}
             >
-              Page {page()} of {Math.ceil(polls.length / itemsPerPage)}
+              Page {page()} of {Math.ceil(polls().length / itemsPerPage)}
             </Typography>
           </Grid>
           <Grid item xs>
             <Button
               variant="outlined"
-              disabled={page() === Math.ceil(polls.length / itemsPerPage)}
+              disabled={page() === Math.ceil(polls().length / itemsPerPage)}
               onClick={() => setPage(page() + 1)}
             >
               Next

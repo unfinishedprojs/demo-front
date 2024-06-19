@@ -1,4 +1,10 @@
-import { Show, createEffect, createSignal, onMount } from "solid-js";
+import {
+  Show,
+  createEffect,
+  createResource,
+  createSignal,
+  onMount,
+} from "solid-js";
 import { useNavigate, useParams } from "@solidjs/router";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
@@ -17,23 +23,18 @@ import {
 } from "@suid/material";
 import ClosableAlert from "../components/ClosableAlert";
 import { Center } from "../components/Center";
-import { useAPI } from "../hooks/useAPI";
+import { fetchApi } from "../utils/fetchApi";
 
 const VotePage = () => {
   const params = useParams();
   const [delButCont, setDelButCont] = createSignal("Delete");
   const [alertOpen, setAlertOpen] = createSignal(false);
   const [warned, setWarned] = createSignal(false);
-  const [error, setError] = createSignal(undefined);
   const navigate = useNavigate();
 
-  const { error: apiError, response: poll } = useAPI(
-    "getInviteEvent",
-    params.id,
-  );
-  createEffect(() => {
-    setAlertOpen(!!error() || !!apiError());
-  });
+  const [poll] = createResource(() => fetchApi("getInviteEvent", params.id));
+  const { error: apiError, loading } = poll;
+  const [error, setError] = createSignal(apiError);
 
   const vote = async (option) => {
     try {
@@ -46,11 +47,7 @@ const VotePage = () => {
 
       if ("error" in response) {
         console.log(response);
-        setError(
-          response.maybeJson
-            ? response.maybeJson.error
-            : "Something went wrong!",
-        );
+        setError(response.maybeJson?.error || "Something went wrong!");
         return;
       }
 
@@ -73,11 +70,7 @@ const VotePage = () => {
 
       if ("error" in response) {
         console.log(response);
-        setError(
-          response.maybeJson
-            ? response.maybeJson.error
-            : "Something went wrong!",
-        );
+        setError(response.maybeJson?.error || "Something went wrong!");
         return setAlertOpen(true);
       }
       alert("Event deleted!");

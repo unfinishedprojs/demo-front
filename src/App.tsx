@@ -17,17 +17,59 @@ import { Layout } from "./Layout";
 import { createMemo } from "solid-js";
 import CustomizeUserPage from "./pages/CustomizeUserPage";
 import RG from "./RouterGuard";
+import { themes } from "./constants";
 
-const cssVar = (name: string) =>
-  getComputedStyle(document.body).getPropertyValue(name).trim();
+const cssVar = (name: string) => {
+  return getComputedStyle(document.body).getPropertyValue(name).trim();
+};
 
 function App() {
   const palette = createMemo(() => {
     return createPalette({
-      mode: themeGeneral(),
+      mode: themes.find((t) => t.value === themeGeneral())!.dark
+        ? "dark"
+        : "light",
+      background: {
+        default: cssVar("--base"),
+        paper: cssVar("--box"),
+      },
+      text: {
+        primary: cssVar("--text"),
+        secondary: cssVar("--subtext"),
+      },
+      primary: {
+        contrastText: cssVar("--text"),
+        main: cssVar("--accent"),
+        dark: cssVar("-accent-dark"),
+        light: cssVar("--accent-light"),
+      },
+      error: {
+        contrastText: cssVar("--text"),
+        main: cssVar("--error"),
+        dark: cssVar("-error-dark"),
+        light: cssVar("--error-light"),
+      },
+      warning: {
+        contrastText: cssVar("--text"),
+        main: cssVar("--warning"),
+        dark: cssVar("-warning-dark"),
+        light: cssVar("--warning-light"),
+      },
+      info: {
+        contrastText: cssVar("--text"),
+        main: cssVar("--info"),
+        dark: cssVar("-info-dark"),
+        light: cssVar("--info-light"),
+      },
+      success: {
+        contrastText: cssVar("--text"),
+        main: cssVar("--success"),
+        dark: cssVar("-success-dark"),
+        light: cssVar("--success-light"),
+      },
       box: {
-        main: cssVar("--body-background-color"),
-        box: cssVar("--box-background-color"),
+        main: cssVar("--base"),
+        box: cssVar("--box"),
         border: cssVar("--border-color"),
         text: cssVar("--text"),
       },

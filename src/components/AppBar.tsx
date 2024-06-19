@@ -68,7 +68,9 @@ const AppBar = () => {
   };
 
   return (
-    <AppBarSuid sx={{ position: "sticky", marginBottom: "1rem" }}>
+    <AppBarSuid
+      sx={{ position: "sticky", marginBottom: "1rem", bgcolor: "box.box" }}
+    >
       <Toolbar>
         <Typography
           variant="h6"
