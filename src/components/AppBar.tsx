@@ -11,7 +11,7 @@ import {
   Box,
 } from "@suid/material";
 import ThemeToggle from "./ThemeToggle"; // Ensure this path is correct
-import { useNavigate } from "@solidjs/router";
+import { A, useNavigate } from "@solidjs/router";
 
 const AppBar = () => {
   const navigate = useNavigate();
@@ -52,26 +52,6 @@ const AppBar = () => {
     handleClose();
   };
 
-  const handleDashboard = () => {
-    navigate("/dashboard");
-    handleClose();
-  };
-
-  const handlePolls = () => {
-    navigate("/polls");
-    handleClose();
-  };
-
-  const handleEnded = () => {
-    navigate("/ended");
-    handleClose();
-  };
-
-  const handleSuggest = () => {
-    navigate("/suggest");
-    handleClose();
-  };
-
   const handleRules = () => {
     navigate("/rules");
     handleClose();
@@ -98,14 +78,14 @@ const AppBar = () => {
         >
           {demoInfraTexts[demoInfraIndex()]}
         </Typography>
-        <Button variant="text" class="!text-text" onClick={handleSuggest}>
-          Suggest
+        <Button variant="text" class="!text-text">
+          <A href="/suggest">Suggest</A>
         </Button>
-        <Button variant="text" class="!text-text" onClick={handlePolls}>
-          Polls
+        <Button variant="text" class="!text-text">
+          <A href="/polls">Polls</A>
         </Button>
-        <Button variant="text" class="!text-text" onClick={handleEnded}>
-          Ended
+        <Button variant="text" class="!text-text">
+          <A href="/ended">Ended</A>
         </Button>
         <ThemeToggle />
         <IconButton onClick={handleAvatarClick}>

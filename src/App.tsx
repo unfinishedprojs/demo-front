@@ -14,8 +14,9 @@ import { theme as themeGeneral } from "./components/ThemeToggle";
 import EndedPage from "./pages/EndedPage";
 import RulesPage from "./pages/RulesPage";
 import { Layout } from "./Layout";
-import { createEffect, createMemo, createSignal } from "solid-js";
+import { createMemo } from "solid-js";
 import CustomizeUserPage from "./pages/CustomizeUserPage";
+import RG from "./RouterGuard";
 
 const cssVar = (name: string) =>
   getComputedStyle(document.body).getPropertyValue(name).trim();
@@ -40,13 +41,21 @@ function App() {
       <Router root={Layout}>
         <Route path="/" component={RegisterPage} />
         <Route path="/login" component={LoginPage} />
-        <Route path="/polls" component={PollsPage} />
-        <Route path="/ended" component={EndedPage} />
+
+        <Route path="/polls" component={() => <RG children={PollsPage} />} />
+        <Route path="/ended" component={() => <RG children={EndedPage} />} />
+
         <Route path="/register" component={RegisterPage} />
-        <Route path="/vote/:id" component={VotePage} />
-        <Route path="/suggest" component={SuggestUserPage} />
+        <Route path="/vote/:id" component={() => <RG children={VotePage} />} />
+        <Route
+          path="/suggest"
+          component={() => <RG children={SuggestUserPage} />}
+        />
         <Route path="/rules" component={RulesPage} />
-        <Route path="/role" component={CustomizeUserPage} />
+        <Route
+          path="/role"
+          component={() => <RG children={CustomizeUserPage} />}
+        />
       </Router>
     </ThemeProvider>
   );

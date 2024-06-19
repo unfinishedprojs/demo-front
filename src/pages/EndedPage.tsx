@@ -1,4 +1,4 @@
-import { createSignal, onMount } from "solid-js";
+import { createEffect, createSignal, onMount } from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import List from "@suid/material/List";
 import ListItem from "@suid/material/ListItem";
@@ -19,9 +19,9 @@ import {
 } from "@suid/material";
 import ClosableAlert from "../components/ClosableAlert";
 import { SortBy, sortPolls } from "../utils/sortPolls";
-import { UserListItemLoadingSkeleton } from "../components/UserListItemSkeleton";
+import { UserListItemsLoadingSkeleton } from "../components/UserListItemSkeleton";
 import type { APIGetIEventResponse } from "../lib/types";
-import { MOBILE_MEDIA_QUERY } from "../utils/mobileMediaQuery";
+import { useAPI } from "../hooks/useAPI";
 
 const UserListItem = ({ poll }: { poll: APIGetIEventResponse }) => {
   const navigate = useNavigate();
@@ -46,80 +46,37 @@ const UserListItem = ({ poll }: { poll: APIGetIEventResponse }) => {
 };
 
 const EndedPage = () => {
-  const [polls, setPolls] = createSignal([]);
-  const [loading, setLoading] = createSignal(true);
-  const navigate = useNavigate();
-  const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
   const [page, setPage] = createSignal(1);
   const [sortMethod, setSortMethod] = createSignal<SortBy>(SortBy.Newest);
-  const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY);
   const itemsPerPage = 5;
-
-  const fetchPolls = async () => {
-    setLoading(true);
-    try {
-      const response = await api.getInviteEvents(
-        localStorage.getItem("token"),
-        { ended: "true" }
-      );
-      if ("error" in response) {
-        setError(
-          response.maybeJson
-            ? response.maybeJson.error
-            : "Something went wrong!"
-        );
-        setAlertOpen(true);
-      } else {
-        const sortedPolls = sortPolls(response.events, sortMethod());
-        setPolls(sortedPolls);
-      }
-    } catch (error) {
-      setError("Failed to fetch polls!");
-      setAlertOpen(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  onMount(async () => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/");
-    }
-
-    try {
-      const response = await api.verifyToken(localStorage.getItem("token"));
-      if ("error" in response) {
-        alert("Could not verify your token");
-        navigate("/");
-      } else {
-      }
-    } catch (error) {}
-
-    fetchPolls();
+  const {
+    loading,
+    error,
+    response: rawPolls,
+  } = useAPI("getInviteEvents", { ended: "true" });
+  createEffect(() => {
+    setAlertOpen(!!error());
   });
+
+  const polls = sortPolls(rawPolls()?.events || [], sortMethod());
 
   const handleSortChange = (event) => {
     setSortMethod(event.target.value);
-    fetchPolls();
   };
 
   const currentPolls = () => {
     const start = (page() - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return polls().slice(start, end);
+    return polls.slice(start, end);
   };
 
   return (
     <Box
+      class="w-[90%] rounded-md p-4 md:w-[60vw]"
       sx={{
         bgcolor: "box.box",
-        width: isMobile() ? "90%" : "60vw",
-        p: "20px",
         border: "1px solid box.box",
-        borderRadius: "8px",
       }}
     >
       <ClosableAlert
@@ -129,7 +86,7 @@ const EndedPage = () => {
       >
         {error()}
       </ClosableAlert>
-      <Box sx={{ display: "flex" }}>
+      <Box class="flex">
         <Typography
           variant="h6"
           p="10px"
@@ -146,7 +103,7 @@ const EndedPage = () => {
       </Box>
       <List>
         {loading() ? (
-          <UserListItemLoadingSkeleton itemAmount={itemsPerPage} />
+          <UserListItemsLoadingSkeleton itemAmount={itemsPerPage} />
         ) : (
           currentPolls().map((poll) => <UserListItem poll={poll} />)
         )}
@@ -180,13 +137,13 @@ const EndedPage = () => {
               align="center"
               sx={{ justifyContent: "center" }}
             >
-              Page {page()} of {Math.ceil(polls().length / itemsPerPage)}
+              Page {page()} of {Math.ceil(polls.length / itemsPerPage)}
             </Typography>
           </Grid>
           <Grid item xs>
             <Button
               variant="outlined"
-              disabled={page() === Math.ceil(polls().length / itemsPerPage)}
+              disabled={page() === Math.ceil(polls.length / itemsPerPage)}
               onClick={() => setPage(page() + 1)}
             >
               Next

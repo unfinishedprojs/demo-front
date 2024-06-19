@@ -8,6 +8,7 @@ import { Box, Container, CssBaseline, useMediaQuery } from "@suid/material";
 import NoLoginAppBar from "../components/NoLoginAppBar";
 import { MOBILE_MEDIA_QUERY } from "../utils/mobileMediaQuery";
 import { Center } from "../components/Center";
+import { getToken } from "../utils/getToken";
 
 const LoginPage = () => {
   const [discordId, setDiscordId] = createSignal("");
@@ -18,10 +19,10 @@ const LoginPage = () => {
   const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY);
 
   onMount(async () => {
-    if (!localStorage.getItem("token")) return;
+    if (!getToken()) return;
 
     try {
-      const response = await api.verifyToken(localStorage.getItem("token"));
+      const response = await api.verifyToken();
       if ("error" in response) {
         console.log("Token in localStorage is invalid, ignoring...");
       } else {
@@ -39,29 +40,30 @@ const LoginPage = () => {
     try {
       const response = await api.login(password(), discordId());
       if ("error" in response) {
-        if (response.status === 403) {
-          setError(response.maybeJson?.error);
-          return setAlertOpen(true);
-        } else if (response.status === 400) {
-          setError(response.maybeJson?.error);
-          return setAlertOpen(true);
-        } else {
-          setError(
-            response.maybeJson
-              ? response.maybeJson.error
-              : "Something went wrong!"
-          );
-          return setAlertOpen(true);
+        switch (response.status) {
+          case 409:
+          case 400:
+            setError(response.maybeJson?.error);
+            break;
+          default:
+            setError(
+              response.maybeJson
+                ? response.maybeJson.error
+                : "Something went wrong!",
+            );
+            break;
         }
-      } else {
-        console.log(response);
-        localStorage.setItem("token", response.token);
-        localStorage.setItem("discordUser", response.discordUser);
-        localStorage.setItem("discordSlug", response.discordSlug);
-        localStorage.setItem("discordPfpUrl", response.discordPfpUrl);
-        localStorage.setItem("admin", response.admin);
-        navigate("/polls");
+
+        return setAlertOpen(true);
       }
+
+      console.log(response);
+      localStorage.setItem("discordUser", response.discordUser);
+      localStorage.setItem("discordSlug", response.discordSlug);
+      localStorage.setItem("discordPfpUrl", response.discordPfpUrl);
+      localStorage.setItem("admin", response.admin);
+      localStorage.setItem("token", response.token);
+      navigate("/polls");
     } catch (error) {
       setError("There was an error!");
       return setAlertOpen(true);

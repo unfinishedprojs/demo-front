@@ -1,4 +1,4 @@
-import { Show, createSignal, onMount } from "solid-js";
+import { Show, createEffect, createSignal, onMount } from "solid-js";
 import { useNavigate, useParams } from "@solidjs/router";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
@@ -6,90 +6,56 @@ import type {
   APIIVotePosResponse,
   APIIVoteNegResponse,
   APIFetchError,
-  APIUsersVerifyResponse,
 } from "../lib/types";
 import {
   Alert,
   Avatar,
   Box,
   CircularProgress,
-  Container,
   Stack,
   Typography,
 } from "@suid/material";
-import AppBar from "../components/AppBar";
 import ClosableAlert from "../components/ClosableAlert";
-import Footer from "../components/Footer";
 import { Center } from "../components/Center";
+import { useAPI } from "../hooks/useAPI";
 
 const VotePage = () => {
   const params = useParams();
-  const [poll, setPoll] = createSignal(null);
   const [delButCont, setDelButCont] = createSignal("Delete");
-  const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
   const [warned, setWarned] = createSignal(false);
+  const [error, setError] = createSignal(undefined);
   const navigate = useNavigate();
 
-  onMount(async () => {
-    try {
-      const response = await api.getInviteEvent(
-        localStorage.getItem("token"),
-        params.id
-      );
-      if ("error" in response) {
-        setError(
-          response.maybeJson
-            ? response.maybeJson.error
-            : "Something went wrong!"
-        );
-        return setAlertOpen(true);
-      } else {
-        console.log(response);
-        setPoll(response);
-      }
-    } catch (error) {
-      alert("Failed to fetch poll!");
-    }
+  const { error: apiError, response: poll } = useAPI(
+    "getInviteEvent",
+    params.id,
+  );
+  createEffect(() => {
+    setAlertOpen(!!error() || !!apiError());
   });
 
   const vote = async (option) => {
     try {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        navigate("/");
-      }
-
-      try {
-        const response = await api.verifyToken(localStorage.getItem("token"));
-        if ("error" in response) {
-          alert("Could not verify your token");
-          navigate("/");
-        } else {
-        }
-      } catch (error) {}
-
       let response:
         | APIIVotePosResponse
         | APIIVoteNegResponse
         | APIFetchError<Record<string, string>>;
-      if (option === "yes") response = await api.votePositive(token, params.id);
-      else if (option === "no")
-        response = await api.voteNegative(token, params.id);
+      if (option === "yes") response = await api.votePositive(params.id);
+      else if (option === "no") response = await api.voteNegative(params.id);
 
       if ("error" in response) {
         console.log(response);
         setError(
           response.maybeJson
             ? response.maybeJson.error
-            : "Something went wrong!"
+            : "Something went wrong!",
         );
-        return setAlertOpen(true);
-      } else {
-        alert("Vote successful!");
-        navigate("/polls");
+        return;
       }
+
+      alert("Vote successful!");
+      navigate("/polls");
     } catch (error) {
       alert("Vote failed!");
     }
@@ -97,42 +63,38 @@ const VotePage = () => {
 
   const verifyDelete = async () => {
     setDelButCont("Are you sure?");
-    if (warned() === false) return setWarned(true);
-    if (warned() === true) {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) throw new Error("No token found");
+    if (warned()) return setWarned(true);
 
-        let response = await api.deleteEvent(params.id, token);
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No token found");
 
-        if ("error" in response) {
-          console.log(response);
-          setError(
-            response.maybeJson
-              ? response.maybeJson.error
-              : "Something went wrong!"
-          );
-          return setAlertOpen(true);
-        } else {
-          alert("Event deleted!");
-          navigate("/polls");
-        }
-      } catch (error) {
-        console.log(error);
-        alert("Vote failed!");
+      let response = await api.deleteEvent(params.id);
+
+      if ("error" in response) {
+        console.log(response);
+        setError(
+          response.maybeJson
+            ? response.maybeJson.error
+            : "Something went wrong!",
+        );
+        return setAlertOpen(true);
       }
+      alert("Event deleted!");
+      navigate("/polls");
+    } catch (error) {
+      console.log(error);
+      alert("Vote failed!");
     }
   };
 
   return (
     <Center>
       <Box
+        class="min-w-[35rem] rounded-md p-4"
         sx={{
           bgcolor: "box.box",
-          p: "20px",
-          minWidth: "35rem",
           border: "1px solid box.box",
-          borderRadius: "8px",
         }}
       >
         {poll() ? (
@@ -158,9 +120,9 @@ const VotePage = () => {
               {`Negative votes: ${poll().negativeVotesInt}`}
             </Typography>
 
-            <Show when={poll().invite}>
+            <Show when={"invite" in poll()}>
               <Typography gutterBottom variant="body1" color="textSecondary">
-                {`(ADMIN) Invite: ${poll().invite}`}
+                {`(ADMIN) Invite: ${(poll() as any).invite}`}
               </Typography>
             </Show>
 
@@ -172,7 +134,7 @@ const VotePage = () => {
               {error()}
             </ClosableAlert>
 
-            <Show when={poll().ended === true}>
+            <Show when={poll().ended}>
               <Alert severity="error">This poll has ended!</Alert>
 
               <Stack

@@ -15,12 +15,12 @@ const Footer = (props: any) => {
         setApiVersion(response.version);
       }
     } catch (error) {
-      alert("Failed to fetch polls!");
+      console.error(error);
     }
   });
 
   return (
-    <footer class="w-screen box-border mb-8">
+    <footer class="mb-8 box-border w-screen">
       <Typography
         variant="body2"
         color="text.secondary"

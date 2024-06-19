@@ -30,7 +30,7 @@ const RegisterPage = () => {
     if (!localStorage.getItem("token")) return;
 
     try {
-      const response = await api.verifyToken(localStorage.getItem("token"));
+      const response = await api.verifyToken();
       if ("error" in response) {
         console.log("Token in localStorage is invalid, ignoring...");
       } else {
@@ -49,7 +49,7 @@ const RegisterPage = () => {
       const response = await api.register(
         inviteCode(),
         discordId(),
-        password()
+        password(),
       );
       if ("error" in response) {
         if (response.status === 403) {
@@ -62,7 +62,7 @@ const RegisterPage = () => {
           setError(
             response.maybeJson
               ? response.maybeJson.error
-              : "Something went wrong!"
+              : "Something went wrong!",
           );
           return setAlertOpen(true);
         }
