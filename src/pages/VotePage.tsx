@@ -30,11 +30,10 @@ const VotePage = () => {
   const [delButCont, setDelButCont] = createSignal("Delete");
   const [alertOpen, setAlertOpen] = createSignal(false);
   const [warned, setWarned] = createSignal(false);
+  const [error, setError] = createSignal("");
   const navigate = useNavigate();
 
   const [poll] = createResource(() => fetchApi("getInviteEvent", params.id));
-  const { error: apiError, loading } = poll;
-  const [error, setError] = createSignal(apiError);
 
   const vote = async (option) => {
     try {
@@ -90,7 +89,7 @@ const VotePage = () => {
           border: "1px solid box.box",
         }}
       >
-        {poll() ? (
+        {!poll.loading ? (
           <>
             <Avatar
               alt={poll().discordSlug}

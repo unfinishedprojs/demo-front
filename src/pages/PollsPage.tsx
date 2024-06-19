@@ -73,12 +73,12 @@ const PollsPage = () => {
   const [rawPolls] = createResource(() =>
     fetchApi("getInviteEvents", { ended: "false" }),
   );
-  const { loading, error } = rawPolls;
 
   const [showAlert, setAlert] = createSignal(false);
-  createEffect(() => setAlert(!!error()));
 
-  const polls = sortPolls(rawPolls()?.events || [], sortMethod());
+  const polls = createMemo(() =>
+    sortPolls(rawPolls()?.events || [], sortMethod()),
+  );
 
   const handleSortChange = (event) => {
     setSortMethod(event.target.value);
@@ -87,7 +87,7 @@ const PollsPage = () => {
   const currentPolls = createMemo(() => {
     const start = (page() - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return polls.slice(start, end);
+    return polls().slice(start, end);
   });
 
   return (
@@ -103,7 +103,7 @@ const PollsPage = () => {
         severity="error"
         onClose={() => setAlert(false)}
       >
-        {error()}
+        {rawPolls.error}
       </ClosableAlert>
       <Box class="flex" sx={{ display: "flex" }}>
         <Typography
@@ -122,7 +122,7 @@ const PollsPage = () => {
       </Box>
       <List>
         <Show
-          when={!loading}
+          when={!rawPolls.loading}
           fallback={<UserListItemsLoadingSkeleton itemAmount={itemsPerPage} />}
         >
           {currentPolls().map((poll) => (
