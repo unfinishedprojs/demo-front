@@ -1,3 +1,16 @@
+## 0.4.3
+
+This update was made by @hen
+
+- useAPI to remove onMount
+- RouteGuard to remove onMount
+- Changed some `sx` styles to tailwind classes, less bandwidth thanks to gzip and less classes like `.css_hkj12h3`
+- API uses generics now
+
+## 0.4.2
+
+- Fix padding
+
 ## 0.4.1
 
 - Add the ability for users to add to themselves custom roles
