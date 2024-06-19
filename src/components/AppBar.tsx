@@ -77,6 +77,11 @@ const AppBar = () => {
     handleClose();
   };
 
+  const handleRole = () => {
+    navigate("/role");
+    handleClose();
+  };
+
   const handleDemoInfraClick = () => {
     const randomIndex = Math.floor(Math.random() * demoInfraTexts.length);
     setDemoInfraIndex(randomIndex);
@@ -94,7 +99,7 @@ const AppBar = () => {
           {demoInfraTexts[demoInfraIndex()]}
         </Typography>
         <Button variant="text" class="!text-text" onClick={handleSuggest}>
-          SuggesT
+          Suggest
         </Button>
         <Button variant="text" class="!text-text" onClick={handlePolls}>
           Polls
@@ -123,6 +128,7 @@ const AppBar = () => {
           }}
         >
           {/* <MenuItem onClick={handleDashboard}>Dashboard</MenuItem> */}
+          <MenuItem onClick={handleRole}>Custom Role</MenuItem>
           <MenuItem onClick={handleRules}>Rules</MenuItem>
           <MenuItem onClick={handleLogout}>Log Out</MenuItem>
         </Menu>

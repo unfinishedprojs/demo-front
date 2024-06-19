@@ -31,7 +31,7 @@ const UserListItem = ({ poll }: { poll: APIGetIEventResponse }) => {
 
   const userSlugText =
     (poll.discordUser ? poll.discordUser : poll.discordSlug) +
-    `| +${poll.positiveVotesInt} | -${poll.negativeVotesInt}`;
+    ` | +${poll.positiveVotesInt} | -${poll.negativeVotesInt}`;
 
   const pollPercentage =
     ((poll.positiveVotesInt / (poll.positiveVotesInt + poll.negativeVotesInt)) *

@@ -1,3 +1,8 @@
+## 0.4.1
+
+- Add the ability for users to add to themselves custom roles
+- Correct text error in polls
+
 ## 0.4.0
 
 This update was made by @hen

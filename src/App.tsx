@@ -15,6 +15,7 @@ import EndedPage from "./pages/EndedPage";
 import RulesPage from "./pages/RulesPage";
 import { Layout } from "./Layout";
 import { createEffect, createMemo, createSignal } from "solid-js";
+import CustomizeUserPage from "./pages/CustomizeUserPage";
 
 const cssVar = (name: string) =>
   getComputedStyle(document.body).getPropertyValue(name).trim();
@@ -45,6 +46,7 @@ function App() {
         <Route path="/vote/:id" component={VotePage} />
         <Route path="/suggest" component={SuggestUserPage} />
         <Route path="/rules" component={RulesPage} />
+        <Route path="/role" component={CustomizeUserPage} />
       </Router>
     </ThemeProvider>
   );

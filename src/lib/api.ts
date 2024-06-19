@@ -138,5 +138,12 @@ export const api = {
       token
     )) as APISuggestUserResponse | APIFetchError;
   },
+  createCustomRole: async (roleColour: string, roleName: string, token: string) => {
+    return (await awaitedPost(
+      "/api/v2/users/role",
+      { roleColour, roleName },
+      token
+    )) as APISuggestUserResponse | APIFetchError;
+  },
 };
 export default api;
