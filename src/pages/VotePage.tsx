@@ -83,7 +83,7 @@ const VotePage = () => {
   return (
     <Center>
       <Box
-        class="min-w-[35rem] rounded-md p-4"
+        class="w-[90%] rounded-md p-4 md:min-w-[35rem]"
         sx={{
           bgcolor: "box.box",
           border: "1px solid box.box",

@@ -3,10 +3,10 @@ import Footer from "./components/Footer";
 
 export const Layout = (props) => {
   return (
-    <div class="min-h-screen flex flex-col justify-between min-w-[100vw]">
+    <div class="flex min-h-dvh min-w-[100vw] flex-col justify-between">
       <AppBar />
-      <div class="min-w-screen mb-auto flex flex-1 items-center justify-center flex-col">
-        <div class="container flex flex-1 items-center justify-center flex-col">
+      <div class="min-w-screen mb-auto flex flex-1 flex-col items-center justify-center">
+        <div class="container flex flex-1 flex-col items-center justify-center">
           {props.children}
         </div>
       </div>

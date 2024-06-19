@@ -124,6 +124,13 @@ html[data-theme="rosebox"] {
   --success-dark: #00915d;
 }
 
+/* Fix SUID weird behavior with dark theme */
+/* It generates weird lineal-gradient to use as bg which overrides bgcolor */
+/* Ignores bgcolor = ignores custom theme */
+[class*="css-"] {
+  background-image: unset !important;
+}
+
 body,
 html {
   background-color: var(--base);
@@ -131,5 +138,5 @@ html {
 
   margin: 0;
   padding: 0;
-  height: 100%;
+  min-height: 100dvh;
 }

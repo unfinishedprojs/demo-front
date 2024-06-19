@@ -47,7 +47,7 @@ const SuggestUserPage = () => {
   return (
     <Center>
       <Box
-        class="rounded-md p-4"
+        class="w-[90%] rounded-md p-4 md:w-80"
         sx={{
           bgcolor: "box.box",
           border: "1px solid box.box",
