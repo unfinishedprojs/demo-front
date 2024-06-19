@@ -2,7 +2,7 @@ import { createSignal } from "solid-js";
 import TextField from "@suid/material/TextField";
 import Button from "@suid/material/Button";
 import api from "../lib/api";
-import { Box } from "@suid/material";
+import { Box, Stack } from "@suid/material";
 import ClosableAlert from "../components/ClosableAlert";
 import { useNavigate } from "@solidjs/router";
 import { Center } from "../components/Center";
@@ -37,41 +37,49 @@ const CustomizeUserPage = () => {
   return (
     <Center>
       <Box
-        class="flex flex-col gap-4 rounded-md p-4"
+        class="w-[90%] rounded-md p-4 md:w-[30vw]"
         sx={{
           bgcolor: "box.box",
           border: "1px solid box.box",
         }}
       >
-        <h1 class="text-2xl">Select your custom role!</h1>
-        <ClosableAlert
-          open={alertOpen()}
-          severity="error"
-          onClose={() => setAlertOpen(false)}
-        >
-          {error()}
-        </ClosableAlert>
-        <div class="flex flex-col gap-2">
-          <TextField
-            class="!my-0"
-            label="Role Name"
-            variant="outlined"
-            onInput={(e) => setRoleName((e.target as HTMLInputElement).value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            class="!my-0"
-            label="Role Hex"
-            variant="outlined"
-            onInput={(e) => setRoleColour((e.target as HTMLInputElement).value)}
-            fullWidth
-            margin="normal"
-          />
-        </div>
-        <Button variant="contained" color="primary" onClick={customizeRole}>
-          Create role
-        </Button>
+        <Stack spacing={2}>
+          <Stack>
+            <h1 class="text-2xl">Select your custom role!</h1>
+            <ClosableAlert
+              open={alertOpen()}
+              severity="error"
+              onClose={() => setAlertOpen(false)}
+            >
+              {error()}
+            </ClosableAlert>
+          </Stack>
+          <Stack>
+            <TextField
+              class="!my-0"
+              label="Role Name"
+              variant="outlined"
+              onInput={(e) => setRoleName((e.target as HTMLInputElement).value)}
+              fullWidth
+            />
+          </Stack>
+          <Stack>
+            <TextField
+              class="!my-0"
+              label="Role Hex"
+              variant="outlined"
+              onInput={(e) =>
+                setRoleColour((e.target as HTMLInputElement).value)
+              }
+              fullWidth
+            />
+          </Stack>
+          <Stack>
+            <Button variant="contained" color="primary" onClick={customizeRole}>
+              Create role
+            </Button>
+          </Stack>
+        </Stack>
       </Box>
     </Center>
   );

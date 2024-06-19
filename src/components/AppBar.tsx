@@ -57,6 +57,11 @@ const AppBar = () => {
     handleClose();
   };
 
+  const handleSettings = () => {
+    navigate("/settings");
+    handleClose();
+  };
+
   const handleRole = () => {
     navigate("/role");
     handleClose();
@@ -89,7 +94,7 @@ const AppBar = () => {
         <Button variant="text" class="!text-text">
           <A href="/ended">Ended</A>
         </Button>
-        <ThemeToggle />
+        {/* <ThemeToggle /> */}
         <IconButton onClick={handleAvatarClick}>
           <Avatar
             alt={localStorage.getItem("discordSlug")}
@@ -110,6 +115,7 @@ const AppBar = () => {
           }}
         >
           {/* <MenuItem onClick={handleDashboard}>Dashboard</MenuItem> */}
+          <MenuItem onClick={handleSettings}>Settings</MenuItem>
           <MenuItem onClick={handleRole}>Custom Role</MenuItem>
           <MenuItem onClick={handleRules}>Rules</MenuItem>
           <MenuItem onClick={handleLogout}>Log Out</MenuItem>

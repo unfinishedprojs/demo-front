@@ -21,7 +21,7 @@ export const themes = [
   },
   {
     value: "rosebox",
-    name: "RoseBox",
+    name: "rosebox",
     dark: true,
   },
 ] as const;

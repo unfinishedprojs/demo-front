@@ -18,6 +18,7 @@ import { createMemo } from "solid-js";
 import CustomizeUserPage from "./pages/CustomizeUserPage";
 import RG from "./RouterGuard";
 import { themes } from "./constants";
+import SettingsPage from "./pages/SettingsPage";
 
 const cssVar = (name: string) => {
   return getComputedStyle(document.body).getPropertyValue(name).trim();
@@ -97,6 +98,10 @@ function App() {
         <Route
           path="/role"
           component={() => <RG children={CustomizeUserPage} />}
+        />
+        <Route
+          path="/settings"
+          component={() => <RG children={SettingsPage} />}
         />
       </Router>
     </ThemeProvider>

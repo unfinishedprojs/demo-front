@@ -1,3 +1,9 @@
+## 0.4.4
+
+- Move theme switcher to Settings (will be populated in the future)
+- Fix padding for Custom Roles page
+- Fix visual name for rosebox
+
 ## 0.4.3
 
 This update was made by @hen
@@ -6,6 +12,7 @@ This update was made by @hen
 - RouteGuard to remove onMount
 - Changed some `sx` styles to tailwind classes, less bandwidth thanks to gzip and less classes like `.css_hkj12h3`
 - API uses generics now
+- Added themes
 
 ## 0.4.2
 

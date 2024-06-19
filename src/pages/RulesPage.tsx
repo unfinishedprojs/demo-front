@@ -21,11 +21,10 @@ const RulesPage = () => {
   return (
     <Center>
       <Box
+        class="w-[90%] rounded-md p-4 md:w-[30vw]"
         sx={{
           bgcolor: "box.box",
-          p: "20px",
           border: "1px solid box.box",
-          borderRadius: "8px",
         }}
       >
         <Show when={localStorage.getItem("token") === "null"}>
@@ -42,7 +41,8 @@ const RulesPage = () => {
         </Typography>
         <Typography>
           3. If you abuse the system in a disruptive way, you will get a 24h ban
-          from the service for first offense,
+          from the service for first offense, and permanently banned from the
+          service for the second. This wont mean you are banned from the group
         </Typography>
         <Typography>4. Be cute</Typography>
 
