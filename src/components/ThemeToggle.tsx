@@ -1,33 +1,25 @@
-import { createSignal, onMount } from "solid-js";
-import Brightness4Icon from "@suid/icons-material/Brightness4";
-import Brightness7Icon from "@suid/icons-material/Brightness7";
-import { IconButton } from "@suid/material";
+import { For, createSignal, onMount } from "solid-js";
+import { IconButton, MenuItem, Select } from "@suid/material";
+import { themes } from "../constants";
 
 export const [theme, setTheme] = createSignal<"light" | "dark">(
-  (localStorage.getItem("theme") as any) || "dark"
+  (localStorage.getItem("theme") as any) || "dark",
 );
 
 const ThemeToggle = (props) => {
-  onMount(() => {
-    document.documentElement.setAttribute("data-theme", theme());
-  });
-
-  const toggleTheme = () => {
-    // location.reload()
-    const newTheme = theme() === "dark" ? "light" : "dark";
+  const changeTheme = (e) => {
+    const newTheme = e.target.value;
     localStorage.setItem("theme", newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
     setTheme(newTheme);
   };
 
   return (
-    <IconButton onClick={toggleTheme}>
-      {theme() === "light" ? (
-        <Brightness4Icon {...props} />
-      ) : (
-        <Brightness7Icon />
-      )}
-    </IconButton>
+    <Select value={theme()} onChange={changeTheme}>
+      <For each={themes}>
+        {(theme) => <MenuItem value={theme.value}>{theme.name}</MenuItem>}
+      </For>
+    </Select>
   );
 };
 

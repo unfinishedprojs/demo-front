@@ -1,3 +1,4 @@
+import { getToken } from "../utils/getToken";
 import type {
   APIUsersVerifyResponse,
   APIFetchError,
@@ -14,25 +15,26 @@ const baseURL = "https://api.samu.lol";
 
 /** assumes res.ok === false */
 async function handleError(requestType: string, res: Response) {
-  const err: APIFetchError = {
+  const err = {
     error: `API: ${requestType}: ${res.status} ${res.statusText}`,
     status: res.status,
     statusText: res.statusText,
-  };
+    maybeJson: undefined,
+  } satisfies APIFetchError;
   try {
     err.maybeJson = await res.json();
   } catch (e) {}
   return err;
 }
 
-async function awaitedPost(
+async function awaitedPost<Response extends Record<string, any>>(
   endpoint: string,
   body: Record<string, unknown>,
-  token: string | null = null
-): Promise<unknown | APIFetchError> {
+): Promise<Response | APIFetchError> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
+  const token = getToken();
   if (token) headers["Authorization"] = `${token}`;
 
   const res = await fetch(`${baseURL}${endpoint}`, {
@@ -46,104 +48,88 @@ async function awaitedPost(
   return json;
 }
 
-async function awaitedGet(
+async function awaitedGet<Response extends Record<string, any>>(
   endpoint: string,
   body: Record<string, string> = {},
-  token: string | null = null
-): Promise<unknown | APIFetchError> {
+): Promise<Response | APIFetchError> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
-  if (token) headers["Authorization"] = `${token}`;
+  const token = getToken();
+  if (token) headers["Authorization"] = token;
 
-  let res: Response;
-  if (body) {
-    const url = new URL(`${baseURL}${endpoint}`);
-    url.search = new URLSearchParams(body).toString();
-    res = await fetch(url.toString(), { headers: headers });
-  } else {
-    res = await fetch(`${baseURL}${endpoint}`, { headers: headers });
-  }
+  const url = new URL(`${baseURL}${endpoint}`);
+  url.search = new URLSearchParams(body).toString();
+  const res = await fetch(url, { headers });
 
   if (!res.ok) return await handleError("awaitedPost", res);
-  const json = await res.json();
-  return json as unknown;
+  return await res.json();
 }
 
 export const api = {
   login: async (password: string, discordId: string) => {
-    return (await awaitedPost("/api/v2/users/login", {
+    return await awaitedPost<APIUsersVerifyResponse>("/api/v2/users/login", {
       password,
       discordId,
-    })) as APIUsersVerifyResponse | APIFetchError;
+    });
   },
-  verifyToken: async (token: string) => {
-    return (await awaitedGet("/api/v2/users/get", {}, token)) as
-      | APIUsersVerifyResponse
-      | APIFetchError;
+  verifyToken: async () => {
+    return await awaitedGet<APIUsersVerifyResponse>("/api/v2/users/get", {});
   },
   register: async (inviteCode: string, discordId: string, password: string) => {
-    return (await awaitedPost("/api/v2/users/register", {
+    return (await awaitedPost<APIRegisterResponse>("/api/v2/users/register", {
       invite: inviteCode,
       discordId,
       password,
     })) as APIRegisterResponse | APIFetchError<APIRegisterErrorResponse>;
   },
   getApiInfo: async () => {
-    return (await awaitedGet("/")) as APIGetApiInfo | APIFetchError;
+    return await awaitedGet<APIGetApiInfo>("/");
   },
-  getInviteEvents: async (token: string, opts: Record<string, string> = {}) => {
-    return (await awaitedGet("/api/v2/ievents/getall", opts, token)) as
-      | APIGetIEventsResponse
-      | APIFetchError;
+  getInviteEvents: async (opts: Record<string, string> = {}) => {
+    return await awaitedGet<APIGetIEventsResponse>(
+      "/api/v2/ievents/getall",
+      opts,
+    );
   },
-  getInviteEvent: async (token: string, eventId: string) => {
-    return (await awaitedGet(
-      "/api/v2/ievents/get",
-      {
-        eventId: eventId,
-      },
-      token
-    )) as APIGetIEventResponse | APIFetchError;
+  getInviteEvent: async (eventId: string) => {
+    return await awaitedGet<APIGetIEventResponse>("/api/v2/ievents/get", {
+      eventId: eventId,
+    });
   },
-  votePositive: async (token: string, eventId: string) => {
-    return (await awaitedPost(
+  votePositive: async (eventId: string) => {
+    return await awaitedPost<APIIVotePosResponse>(
       "/api/v2/ievents/vote/positive",
       {
         eventId: eventId,
       },
-      token
-    )) as APIIVotePosResponse | APIFetchError;
+    );
   },
-  voteNegative: async (token: string, eventId: string) => {
-    return (await awaitedPost(
+  voteNegative: async (eventId: string) => {
+    return await awaitedPost<APIIVotePosResponse>(
       "/api/v2/ievents/vote/negative",
       {
         eventId: eventId,
       },
-      token
-    )) as APIIVotePosResponse | APIFetchError;
+    );
   },
-  suggestUser: async (discordId: string, token: string) => {
-    return (await awaitedPost(
+  suggestUser: async (discordId: string) => {
+    return await awaitedPost<APISuggestUserResponse>(
       "/api/v2/ievents/suggest",
       { discordId },
-      token
-    )) as APISuggestUserResponse | APIFetchError;
+    );
   },
-  deleteEvent: async (eventId: string, token: string) => {
-    return (await awaitedPost(
+  deleteEvent: async (eventId: string) => {
+    return await awaitedPost<APISuggestUserResponse>(
       "/api/v2/admin/deleteevent",
       { eventId },
-      token
-    )) as APISuggestUserResponse | APIFetchError;
+    );
   },
-  createCustomRole: async (roleColour: string, roleName: string, token: string) => {
-    return (await awaitedPost(
-      "/api/v2/users/role",
-      { roleColour, roleName },
-      token
-    )) as APISuggestUserResponse | APIFetchError;
+  createCustomRole: async (roleColour: string, roleName: string) => {
+    return await awaitedPost<APISuggestUserResponse>("/api/v2/users/role", {
+      roleColour,
+      roleName,
+    });
   },
 };
 export default api;

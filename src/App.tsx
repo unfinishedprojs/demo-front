@@ -14,19 +14,62 @@ import { theme as themeGeneral } from "./components/ThemeToggle";
 import EndedPage from "./pages/EndedPage";
 import RulesPage from "./pages/RulesPage";
 import { Layout } from "./Layout";
-import { createEffect, createMemo, createSignal } from "solid-js";
+import { createMemo } from "solid-js";
 import CustomizeUserPage from "./pages/CustomizeUserPage";
+import RG from "./RouterGuard";
+import { themes } from "./constants";
 
-const cssVar = (name: string) =>
-  getComputedStyle(document.body).getPropertyValue(name).trim();
+const cssVar = (name: string) => {
+  return getComputedStyle(document.body).getPropertyValue(name).trim();
+};
 
 function App() {
   const palette = createMemo(() => {
     return createPalette({
-      mode: themeGeneral(),
+      mode: themes.find((t) => t.value === themeGeneral())!.dark
+        ? "dark"
+        : "light",
+      background: {
+        default: cssVar("--base"),
+        paper: cssVar("--box"),
+      },
+      text: {
+        primary: cssVar("--text"),
+        secondary: cssVar("--subtext"),
+      },
+      primary: {
+        contrastText: cssVar("--text"),
+        main: cssVar("--accent"),
+        dark: cssVar("-accent-dark"),
+        light: cssVar("--accent-light"),
+      },
+      error: {
+        contrastText: cssVar("--text"),
+        main: cssVar("--error"),
+        dark: cssVar("-error-dark"),
+        light: cssVar("--error-light"),
+      },
+      warning: {
+        contrastText: cssVar("--text"),
+        main: cssVar("--warning"),
+        dark: cssVar("-warning-dark"),
+        light: cssVar("--warning-light"),
+      },
+      info: {
+        contrastText: cssVar("--text"),
+        main: cssVar("--info"),
+        dark: cssVar("-info-dark"),
+        light: cssVar("--info-light"),
+      },
+      success: {
+        contrastText: cssVar("--text"),
+        main: cssVar("--success"),
+        dark: cssVar("-success-dark"),
+        light: cssVar("--success-light"),
+      },
       box: {
-        main: cssVar("--body-background-color"),
-        box: cssVar("--box-background-color"),
+        main: cssVar("--base"),
+        box: cssVar("--box"),
         border: cssVar("--border-color"),
         text: cssVar("--text"),
       },
@@ -40,13 +83,21 @@ function App() {
       <Router root={Layout}>
         <Route path="/" component={RegisterPage} />
         <Route path="/login" component={LoginPage} />
-        <Route path="/polls" component={PollsPage} />
-        <Route path="/ended" component={EndedPage} />
+
+        <Route path="/polls" component={() => <RG children={PollsPage} />} />
+        <Route path="/ended" component={() => <RG children={EndedPage} />} />
+
         <Route path="/register" component={RegisterPage} />
-        <Route path="/vote/:id" component={VotePage} />
-        <Route path="/suggest" component={SuggestUserPage} />
+        <Route path="/vote/:id" component={() => <RG children={VotePage} />} />
+        <Route
+          path="/suggest"
+          component={() => <RG children={SuggestUserPage} />}
+        />
         <Route path="/rules" component={RulesPage} />
-        <Route path="/role" component={CustomizeUserPage} />
+        <Route
+          path="/role"
+          component={() => <RG children={CustomizeUserPage} />}
+        />
       </Router>
     </ThemeProvider>
   );

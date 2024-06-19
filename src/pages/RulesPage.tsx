@@ -1,9 +1,7 @@
 import { createSignal, onMount, Show } from "solid-js";
-import { useNavigate, useSearchParams } from "@solidjs/router";
-import { Box, Button, Container, Typography } from "@suid/material";
-import Footer from "../components/Footer";
+import { useSearchParams } from "@solidjs/router";
+import { Box, Button, Typography } from "@suid/material";
 import NoLoginAppBar from "../components/NoLoginAppBar";
-import AppBar from "../components/AppBar";
 import { Center } from "../components/Center";
 
 const RulesPage = () => {

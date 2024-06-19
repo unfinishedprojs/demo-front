@@ -3,22 +3,130 @@
 @tailwind utilities;
 
 :root {
-  --body-background-color: #ffffff;
-  --box-background-color: #f0f0f0;
+  --base: #ffffff;
+  --box: #f0f0f0;
   --border-color: #ccc;
   --text: #000;
+
+  --accent-light: #81d4fa;
+  --accent: #29b6f6;
+  --accent-dark: #0288d1;
+
+  --error-light: #e41d40;
+  --error: #ef5350;
+  --error-dark: #b71c1c;
+
+  --info-light: #64b5f6;
+  --info: #2196f3;
+  --info-dark: #1565c0;
+
+  --warning-light: #fff59d;
+  --warning: #ffeb3b;
+  --warning-dark: #fbc02d;
+
+  --success-light: #81c784;
+  --success: #4caf50;
+  --success-dark: #2e7d32;
 }
 
 html[data-theme="dark"] {
-  --body-background-color: #222222;
-  --box-background-color: #333;
+  --base: #222222;
+  --box: #333;
   --border-color: #444;
   --text: #fff;
+  --subtext: #78909c;
+}
+
+/*  For darker/lighter colors use
+  https://m2.material.io/inline-tools/color/
+ */
+html[data-theme="ctp-latte"] {
+  --base: #eff1f5;
+  --box: #e6e9ef;
+  --border-color: #dce0e8;
+  --text: #4c4f69;
+  --subtext: #6c6f85;
+
+  --accent-light: #bc92f5;
+  --accent: #8839ef;
+  --accent-dark: #6e00ea;
+
+  --error-light: #e41d40;
+  --error: #d20f39;
+  --error-dark: #b70026;
+
+  --info-light: #2345e3;
+  --info: #7287fd;
+  --info-dark: #0017b0;
+
+  --warning-light: #db841a;
+  --warning: #df8e1d;
+  --warning-dark: #ce6713;
+
+  --success-light: #65bb54;
+  --success: #40a02b;
+  --success-dark: #085f00;
+}
+
+html[data-theme="ctp-mocha"] {
+  --base: #24273a;
+  --box: #1e2030;
+  --border-color: #181926;
+  --text: #cad3f5;
+  --subtext: #a5adcb;
+
+  --accent-light: #ddc6f9;
+  --accent: #c6a0f6;
+  --accent-dark: #7e33d3;
+
+  --error-light: #e31155;
+  --error: #f38ba8;
+  --error-dark: #850045;
+
+  --info-light: #c7defe;
+  --info: #89b4fa;
+  --info-dark: #7194f4;
+
+  --warning-light: #fdf4df;
+  --warning: #f9e2af;
+  --warning-dark: #e9a200;
+
+  --success-light: #caeec6;
+  --success: #a6e3a1;
+  --success-dark: #54c347;
+}
+
+html[data-theme="rosebox"] {
+  --base: #262626;
+  --box: #232323;
+  --border-color: #333131;
+  --text: #bab5b7;
+  --subtext: #9a9597;
+
+  --accent-light: #d3ad9f;
+  --accent: #a57562;
+  --accent-dark: #855341;
+
+  --error-light: #edc4cc;
+  --error: #bf616a;
+  --error-dark: #b91932;
+
+  --info-light: #b4d9e3;
+  --info: #88c0d0;
+  --info-dark: #007fa9;
+
+  --warning-light: #f2dfb8;
+  --warning: #ebcb8b;
+  --warning-dark: #dd8e13;
+
+  --success-light: #8dd8ba;
+  --success: #a3be8c;
+  --success-dark: #00915d;
 }
 
 body,
 html {
-  background-color: var(--body-background-color);
+  background-color: var(--base);
   color: var(--text);
 
   margin: 0;

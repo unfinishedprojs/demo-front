@@ -1,4 +1,11 @@
-import { createSignal, onMount } from "solid-js";
+import {
+  Show,
+  createEffect,
+  createMemo,
+  createResource,
+  createSignal,
+  onMount,
+} from "solid-js";
 import { useNavigate } from "@solidjs/router";
 import List from "@suid/material/List";
 import ListItem from "@suid/material/ListItem";
@@ -19,9 +26,9 @@ import {
 } from "@suid/material";
 import ClosableAlert from "../components/ClosableAlert";
 import { SortBy, sortPolls } from "../utils/sortPolls";
-import { UserListItemLoadingSkeleton } from "../components/UserListItemSkeleton";
+import { UserListItemsLoadingSkeleton } from "../components/UserListItemSkeleton";
 import type { APIGetIEventResponse } from "../lib/types";
-import { MOBILE_MEDIA_QUERY } from "../utils/mobileMediaQuery";
+import { fetchApi } from "../utils/fetchApi";
 
 const UserListItem = ({ poll }: { poll: APIGetIEventResponse }) => {
   const navigate = useNavigate();
@@ -46,64 +53,20 @@ const UserListItem = ({ poll }: { poll: APIGetIEventResponse }) => {
 };
 
 const EndedPage = () => {
-  const [polls, setPolls] = createSignal([]);
-  const [loading, setLoading] = createSignal(true);
-  const navigate = useNavigate();
-  const [error, setError] = createSignal("");
   const [alertOpen, setAlertOpen] = createSignal(false);
   const [page, setPage] = createSignal(1);
   const [sortMethod, setSortMethod] = createSignal<SortBy>(SortBy.Newest);
-  const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY);
   const itemsPerPage = 5;
+  const [rawPolls] = createResource(() =>
+    fetchApi("getInviteEvents", { ended: "true" }),
+  );
 
-  const fetchPolls = async () => {
-    setLoading(true);
-    try {
-      const response = await api.getInviteEvents(
-        localStorage.getItem("token"),
-        { ended: "true" }
-      );
-      if ("error" in response) {
-        setError(
-          response.maybeJson
-            ? response.maybeJson.error
-            : "Something went wrong!"
-        );
-        setAlertOpen(true);
-      } else {
-        const sortedPolls = sortPolls(response.events, sortMethod());
-        setPolls(sortedPolls);
-      }
-    } catch (error) {
-      setError("Failed to fetch polls!");
-      setAlertOpen(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  onMount(async () => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/");
-    }
-
-    try {
-      const response = await api.verifyToken(localStorage.getItem("token"));
-      if ("error" in response) {
-        alert("Could not verify your token");
-        navigate("/");
-      } else {
-      }
-    } catch (error) {}
-
-    fetchPolls();
-  });
+  const polls = createMemo(() =>
+    sortPolls(rawPolls()?.events || [], sortMethod()),
+  );
 
   const handleSortChange = (event) => {
     setSortMethod(event.target.value);
-    fetchPolls();
   };
 
   const currentPolls = () => {
@@ -114,22 +77,20 @@ const EndedPage = () => {
 
   return (
     <Box
+      class="w-[90%] rounded-md p-4 md:w-[60vw]"
       sx={{
         bgcolor: "box.box",
-        width: isMobile() ? "90%" : "60vw",
-        p: "20px",
         border: "1px solid box.box",
-        borderRadius: "8px",
       }}
     >
       <ClosableAlert
-        open={alertOpen()}
+        open={rawPolls.error && !alertOpen()}
         severity="error"
         onClose={() => setAlertOpen(false)}
       >
-        {error()}
+        {rawPolls}
       </ClosableAlert>
-      <Box sx={{ display: "flex" }}>
+      <Box class="flex">
         <Typography
           variant="h6"
           p="10px"
@@ -145,11 +106,14 @@ const EndedPage = () => {
         </Select>
       </Box>
       <List>
-        {loading() ? (
-          <UserListItemLoadingSkeleton itemAmount={itemsPerPage} />
-        ) : (
-          currentPolls().map((poll) => <UserListItem poll={poll} />)
-        )}
+        <Show
+          when={!rawPolls.loading}
+          fallback={<UserListItemsLoadingSkeleton itemAmount={itemsPerPage} />}
+        >
+          {currentPolls().map((poll) => (
+            <UserListItem poll={poll} />
+          ))}
+        </Show>
       </List>
       <Box
         sx={{

@@ -7,7 +7,7 @@ import {
   Divider,
 } from "@suid/material";
 
-export const UserListItemLoadingSkeleton = ({
+export const UserListItemsLoadingSkeleton = ({
   itemAmount,
 }: {
   itemAmount: number;
