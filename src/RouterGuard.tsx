@@ -1,4 +1,4 @@
-import { useNavigate } from "@SolidJS/router";
+import { useNavigate } from "@solidjs/router";
 import { createEffect, createSignal } from "solid-js";
 import api from "./lib/api";
 import { getToken } from "./utils/getToken";
